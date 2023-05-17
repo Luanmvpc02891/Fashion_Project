@@ -11,4 +11,24 @@ public class HomeController {
 		model.addAttribute("message", "Welcome to Spring MVC");
 		return "index";
 	}
+	@GetMapping("/shop")
+	public String shop(Model model) {	
+		return "shop";
+	}
+	@GetMapping("/detal")
+	public String detal(Model model) {
+		return "detal";
+	}
+	@GetMapping("/cart")
+	public String cart(Model model) {
+		return "cart";
+	}
+	@GetMapping("/checkout")
+	public String checkout(Model model) {
+		return "checkout";
+	}
+	@GetMapping("/contact")
+	public String contact(Model model) {
+		return "contact";
+	}
 }
