@@ -27,6 +27,14 @@ public class HomeController {
 	public String checkout(Model model) {
 		return "checkout";
 	}
+	@GetMapping("/Login")
+	public String Login(Model model) {
+		return "Login";
+	}
+	@GetMapping("/dangky")
+	public String dangky(Model model) {
+		return "dangky";
+	}
 	@GetMapping("/contact")
 	public String contact(Model model) {
 		return "contact";
