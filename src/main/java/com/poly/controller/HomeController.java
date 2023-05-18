@@ -15,9 +15,9 @@ public class HomeController {
 	public String shop(Model model) {	
 		return "shop";
 	}
-	@GetMapping("/detal")
+	@GetMapping("/detail")
 	public String detal(Model model) {
-		return "detal";
+		return "detail";
 	}
 	@GetMapping("/cart")
 	public String cart(Model model) {
