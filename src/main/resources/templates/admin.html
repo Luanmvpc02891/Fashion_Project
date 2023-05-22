@@ -1,0 +1,163 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <title>Title</title>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+</head>
+
+<body>
+    <main class="container-fluid">
+        <nav class="row">
+            <nav class="navbar navbar-expand-sm navbar-light  bg-light col">
+                <a class="navbar-brand" href="#">Administration</a>
+                <button class="navbar-toggler d-lg-none" type="button" data-toggle="collapse"
+                    data-target="#collapsibleNavId" aria-controls="collapsibleNavId" aria-expanded="false"
+                    aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse text-center" id="collapsibleNavId">
+                    <ul class="navbar-nav text-center mr-auto mt-2 mt-lg-0">
+                        <li class="nav-item active">
+                            <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">Product</a>
+                        </li>
+
+
+                    </ul>
+                </div>
+            </nav>
+        </nav>
+        <section class="row">
+            <div class="col mt-4">
+                <ul class="nav nav-tabs" id="myTab" role="tablist">
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link active" id="userEditing-tab" data-toggle="tab"
+                            data-target="#userEditing" type="button" role="tab" aria-controls="userEditing"
+                            aria-selected="true">Product Editing</button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="userList-tab" data-toggle="tab" data-target="#userList"
+                            type="button" role="tab" aria-controls="userList" aria-selected="false">Product List</button>
+                    </li>
+                </ul>
+                <div class="tab-content" id="myTabContent">
+                    <div class="tab-pane fade show active" id="userEditing" role="tabpanel"
+                        aria-labelledby="userEditing-tab">
+                        <form action="" method="post">
+                            <div class="card">
+                                <div class="card-body">
+                                    <div class="row col">
+                                        <div class="form-group col-4">
+                                            <label for="product_id">ID</label>
+                                            <input type="text" class="form-control" name="product_id" id="product_id"
+                                                aria-describedby="product_id" placeholder="ID sản phẩm">
+                                        </div>
+                                        <div class="form-group  col-4">
+                                            <label for="product_name">Tên sản phẩm</label>
+                                            <input type="text" class="form-control" name="product_name"
+                                                id="product_name" aria-describedby="fullnameId"
+                                                placeholder="Tên sản phẩm">
+                                        </div>
+                                        <div class="form-group  col-4">
+                                            <label for="category_id">Loại</label>
+                                            <input type="text" class="form-control" name="category_id" id="category_id"
+                                                aria-describedby="category_id" placeholder="Loại hàng">
+                                        </div>
+                                        <div class="form-group  col-4">
+                                            <label for="price">Giá</label>
+                                            <input type="password" class="form-control" name="price" id="price"
+                                                aria-describedby="passwordId" placeholder="Giá sản phẩm">
+
+                                        </div>
+                                        <div class="form-group  col-4">
+                                            <label for="quantity">Số lượng</label>
+                                            <input type="text" class="form-control" name="quantity" id="quantity"
+                                                aria-describedby="quantity" placeholder="Số lượng">
+
+                                        </div>
+                                        <div class="form-group  col-4">
+                                            <label for="discount">Giảm giá</label>
+                                            <input type="password" class="form-control" name="discount" id="discount"
+                                                aria-describedby="discount" placeholder="Giảm giá">
+                                        </div>
+                                        <div class="form-group  col-4">
+                                            <label for="producer_id">ID Nhà sản xuất</label>
+                                            <input type="producer_id" class="form-control" name="producer_id" id="producer_id"
+                                                aria-describedby="producer_id" placeholder="Mã nhà sản xuất">
+                                        </div>
+                                    </div>
+
+                                </div>
+                                <div class="card-footer text-muted">
+                                    <button class="btn btn-primary">Create</button>
+                                    <button class="btn btn-warning">Update</button>
+                                    <button class="btn btn-danger">Delete</button>
+                                    <button class="btn btn-info">Reset</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+
+
+                    <div class="tab-pane fade" id="userList" role="tabpanel" aria-labelledby="userList-tab">
+                        <table class="table table-stripe">
+                            <tr>
+                                <td>ID</td>
+                                <td>Tên sản phẩm</td>
+                                <td>Giá</td>
+                                <td>Số lượng</td>
+                                <td>Giảm giá</td>
+                                <td>Loại</td>
+                                <td>ID Nhà sản xuất</td>
+                                <td>&nbsp;</td>
+                            </tr>
+                            <tr>
+                                <td>Luân</td>
+                                <td>Mai Vũ Luân</td>
+                                <td>Luan01248@gmail.com</td>
+                                <td>ADmin</td>
+                                <td>Luân</td>
+                                <td>Mai Vũ Luân</td>
+                                <td>Luan01248@gmail.com</td>
+                                <td>
+                                    <a href="">Edit</a>
+                                    <a href="">Delete</a>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <footer class="row"></footer>
+    </main>
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+        crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+        integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+        crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+        crossorigin="anonymous"></script>
+    <script>
+        $('#myTab button').on('click', function (event) {
+            event.preventDefault()
+            $(this).tab('show')
+        })
+    </script>
+</body>
+
+</html>

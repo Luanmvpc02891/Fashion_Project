@@ -39,5 +39,9 @@ public class HomeController {
 	public String contact(Model model) {
 		return "contact";
 	}
+	@GetMapping("/admin")
+	public String admin(Model model) {
+		return "admin";
+	}
 	
 }
