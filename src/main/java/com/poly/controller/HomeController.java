@@ -43,5 +43,8 @@ public class HomeController {
 	public String admin(Model model) {
 		return "admin";
 	}
-	
+	@GetMapping("/user/management")
+	public String usermanagement(Model model) {
+		return "usermanagement";
+	}
 }
