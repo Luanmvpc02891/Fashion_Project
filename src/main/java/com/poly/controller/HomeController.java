@@ -48,5 +48,4 @@ public class HomeController {
 	public String usermanagement(Model model) {
 		return "usermanagement";
 	}
-
 }
