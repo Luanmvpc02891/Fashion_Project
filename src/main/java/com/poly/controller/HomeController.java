@@ -43,5 +43,11 @@ public class HomeController {
 	public String archive(Model model) {
 		return "archive";
 	}
+	@GetMapping("/usermanagement")
+	public String usermanagement(Model model) {
+		return "usermanagement";
+	}
 	
+
+
 }
