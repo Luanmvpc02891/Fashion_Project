@@ -25,14 +25,14 @@
                 </button>
                 <div class="collapse navbar-collapse text-center" id="collapsibleNavId">
                     <ul class="navbar-nav text-center mr-auto mt-2 mt-lg-0">
-                        <li class="nav-item active">
-                            <a class="nav-link" href="#">Product<span class="sr-only">(current)</span></a>
+                        <li class="nav-item active">                       
+                              <a class="nav-link" th:href="@{/admin}">Product</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" th:href="@{/usermanagement}">User</a>
+                             <a class="nav-link" th:href="@{/usermanagement}">User</a>
                         </li>
-                         <li class="nav-item">
-                            <a class="nav-link" th:href="@{/inventory}">Inventory</a>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">Inventory</a>
                         </li>
 
                     </ul>
@@ -45,11 +45,11 @@
                     <li class="nav-item" role="presentation">
                         <button class="nav-link active" id="userEditing-tab" data-toggle="tab"
                             data-target="#userEditing" type="button" role="tab" aria-controls="userEditing"
-                            aria-selected="true">Product Editing</button>
+                            aria-selected="true">Inventory Editing</button>
                     </li>
                     <li class="nav-item" role="presentation">
                         <button class="nav-link" id="userList-tab" data-toggle="tab" data-target="#userList"
-                            type="button" role="tab" aria-controls="userList" aria-selected="false">Product List</button>
+                            type="button" role="tab" aria-controls="userList" aria-selected="false">Inventory List</button>
                     </li>
                 </ul>
                 <div class="tab-content" id="myTabContent">
@@ -60,45 +60,29 @@
                                 <div class="card-body">
                                     <div class="row col">
                                         <div class="form-group col-4">
-                                            <label for="product_id">ID</label>
+                                            <label for="username">ID</label>
+                                            <input type="text" class="form-control" name="id" id="id"
+                                                aria-describedby="id" placeholder="Id kho">                                       
+                                        </div>
+                                        <div class="form-group  col-4">
+                                            <label for="fullname">ID sản phẩm</label>
                                             <input type="text" class="form-control" name="product_id" id="product_id"
-                                                aria-describedby="product_id" placeholder="ID sản phẩm">
-                                        </div>
-                                        <div class="form-group  col-4">
-                                            <label for="product_name">Tên sản phẩm</label>
-                                            <input type="text" class="form-control" name="product_name"
-                                                id="product_name" aria-describedby="fullnameId"
-                                                placeholder="Tên sản phẩm">
-                                        </div>
-                                        <div class="form-group  col-4">
-                                            <label for="category_id">Loại</label>
-                                            <input type="text" class="form-control" name="category_id" id="category_id"
-                                                aria-describedby="category_id" placeholder="Loại hàng">
-                                        </div>
-                                        <div class="form-group  col-4">
-                                            <label for="price">Giá</label>
-                                            <input type="password" class="form-control" name="price" id="price"
-                                                aria-describedby="passwordId" placeholder="Giá sản phẩm">
-
-                                        </div>
-                                        <div class="form-group  col-4">
-                                            <label for="quantity">Số lượng</label>
-                                            <input type="text" class="form-control" name="quantity" id="quantity"
-                                                aria-describedby="quantity" placeholder="Số lượng">
-
-                                        </div>
-                                        <div class="form-group  col-4">
-                                            <label for="discount">Giảm giá</label>
-                                            <input type="password" class="form-control" name="discount" id="discount"
-                                                aria-describedby="discount" placeholder="Giảm giá">
-                                        </div>
-                                        <div class="form-group  col-4">
-                                            <label for="producer_id">ID Nhà sản xuất</label>
-                                            <input type="producer_id" class="form-control" name="producer_id" id="producer_id"
-                                                aria-describedby="producer_id" placeholder="Mã nhà sản xuất">
+                                                aria-describedby="product_id" placeholder="Id sản phẩm">                                      
                                         </div>
                                     </div>
-
+                                    <div class="row col">
+                                        <div class="form-group  col-4">
+                                            <label for="password">Số lượng</label>
+                                            <input type="text" class="form-control" name="quantity" id="quantity"
+                                                aria-describedby="quantity" placeholder="Số lượng">
+                                            </div>
+                                        <div class="form-group  col-4">
+                                            <label for="email">Địa chỉ</label>
+                                            <input type="text" class="form-control" name="address" id="address"
+                                                aria-describedby="address" placeholder="Địa chỉ kho">
+                                            
+                                        </div>
+                                    </div>
                                 </div>
                                 <div class="card-footer text-muted">
                                     <button class="btn btn-primary">Create</button>
@@ -115,12 +99,9 @@
                         <table class="table table-stripe">
                             <tr>
                                 <td>ID</td>
-                                <td>Tên sản phẩm</td>
-                                <td>Giá</td>
+                                <td>ID Sản Phẩm</td>
                                 <td>Số lượng</td>
-                                <td>Giảm giá</td>
-                                <td>Loại</td>
-                                <td>ID Nhà sản xuất</td>
+                                <td>Địa chỉ</td>
                                 <td>&nbsp;</td>
                             </tr>
                             <tr>
@@ -128,9 +109,6 @@
                                 <td>Mai Vũ Luân</td>
                                 <td>Luan01248@gmail.com</td>
                                 <td>ADmin</td>
-                                <td>Luân</td>
-                                <td>Mai Vũ Luân</td>
-                                <td>Luan01248@gmail.com</td>
                                 <td>
                                     <a href="">Edit</a>
                                     <a href="">Delete</a>
@@ -160,6 +138,3 @@
             $(this).tab('show')
         })
     </script>
-</body>
-
-</html>
