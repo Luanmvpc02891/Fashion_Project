@@ -39,15 +39,13 @@ public class HomeController {
 	public String contact(Model model) {
 		return "contact";
 	}
-	@GetMapping("/archive")
-	public String archive(Model model) {
-		return "archive";
+
+	@GetMapping("/admin")
+	public String admin(Model model) {
+		return "admin";
 	}
 	@GetMapping("/usermanagement")
 	public String usermanagement(Model model) {
 		return "usermanagement";
 	}
-	
-
-
 }
