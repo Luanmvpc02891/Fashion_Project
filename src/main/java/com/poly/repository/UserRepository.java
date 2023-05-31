@@ -1,10 +1,12 @@
 package com.poly.repository;
 
-import org.springframework.data.repository.CrudRepository;
+import java.util.List;
 
-import com.poly.model.Users;
+import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface UserRepository extends CrudRepository<Users, String> {
-    Users findByUsername(String username);
+import com.poly.entity.User;
+
+public interface UserRepository extends JpaRepository<User, Integer> {
+	List<User> findAll();
+	
 }
-

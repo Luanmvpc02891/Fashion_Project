@@ -7,9 +7,10 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 @SpringBootApplication
-@ComponentScan(basePackages = {"com.poly.controller","com.poly.model","com.poly.repository","com.poly.config"})
+@ComponentScan(basePackages = {"com.poly.controller","com.poly.model","com.poly.repository","com.poly.config",
+		"com.poly.entity","com.poly.service"})
 @EnableJpaRepositories("com.poly.repository")
-@EntityScan("com.poly.model")
+@EntityScan("com.poly.entity")
 public class FashionProjectApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(FashionProjectApplication.class, args);
