@@ -1,6 +1,8 @@
 package com.poly.entity;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.List;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -9,38 +11,51 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
+import lombok.Data;
 
 @Entity
 @Table(name = "products")
-public class Product {
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "product_id")
-	private Integer productId;
-
-	@Column(name = "product_name")
-	private String productName;
-
-	@Column(name = "price")
-	private BigDecimal price;
-
-	@Column(name = "quantity")
-	private Integer quantity;
-
-	@Column(name = "discount")
-	private BigDecimal discount;
- 
-	@Column(name = "image")
-	private String image;
-	
-	@ManyToOne
-	@JoinColumn(name = "category_id")
-	private Category category;
-
-	@ManyToOne
-	@JoinColumn(name = "producer_id")
-	private Producer producer;
-
-	// Constructors, getters and setters
+@Data
+public class Product implements Serializable {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "product_id")
+    private int productId;
+    
+    @Column(name = "product_name")
+    private String productName;
+    
+    @Column(name = "price")
+    private BigDecimal price;
+    
+    @Column(name = "quantity")
+    private int quantity;
+    
+    @Column(name = "discount")
+    private BigDecimal discount;
+    
+    @Column(name = "image")
+    private String image;
+    
+    @ManyToOne
+    @JoinColumn(name = "category_id")
+    private Category category;
+    
+    @ManyToOne
+    @JoinColumn(name = "producer_id")
+    private Producer producer;
+    
+    @OneToMany(mappedBy = "product")
+    private List<OrderItem> orderItems;
+    
+    @OneToMany(mappedBy = "product")
+    private List<CartProduct> cartProducts;
+    
+    @OneToOne(mappedBy = "product")
+    private Inventory inventory;
+    
+    // Constructors, getters, setters, and other properties
 }

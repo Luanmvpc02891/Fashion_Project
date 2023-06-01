@@ -20,15 +20,15 @@ import jakarta.validation.Valid;
 @Controller
 public class HomeController {
 
-	@GetMapping("/shop")
-	public String shop(Model model) {
-		return "shop";
-	}
-
-	@GetMapping("/detail")
-	public String detal(Model model) {
-		return "detail";
-	}
+//	@GetMapping("/shop")
+//	public String shop(Model model) {
+//		return "shop";
+//	}
+//
+//	@GetMapping("/detail")
+//	public String detal(Model model) {
+//		return "detail";
+//	}
 
 	@GetMapping("/cart")
 	public String cart(Model model) {
@@ -45,10 +45,10 @@ public class HomeController {
 		return "contact";
 	}
 
-	@GetMapping("/admin")
-	public String admin(Model model) {
-		return "admin";
-	}
+//	@GetMapping("/admin")
+//	public String admin(Model model) {
+//		return "admin";
+//	}
 
 	@GetMapping("/inventory")
 	public String inventory(Model model) {
