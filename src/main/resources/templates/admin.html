@@ -61,57 +61,62 @@
 				<div class="tab-content" id="myTabContent">
 					<div class="tab-pane fade show active" id="userEditing"
 						role="tabpanel" aria-labelledby="userEditing-tab">
-						<form action="" method="post">
+						<form th:action="@{/admin}" th:object="${product}" method="post">
 							<div class="card">
 								<div class="card-body">
 									<div class="row col">
 										<div class="form-group col-4">
 											<label for="product_id">ID</label> <input type="text"
-												class="form-control" name="product_id" id="product_id"
+												class="form-control" th:field="*{productId}" id="product_id"
 												aria-describedby="product_id" placeholder="ID sản phẩm">
 										</div>
 										<div class="form-group  col-4">
 											<label for="product_name">Tên sản phẩm</label> <input
-												type="text" class="form-control" name="product_name"
+												type="text" class="form-control" th:field="*{productName}"
 												id="product_name" aria-describedby="fullnameId"
 												placeholder="Tên sản phẩm">
 										</div>
 										<div class="form-group  col-4">
-											<label for="category_id">Loại</label> <input type="text"
-												class="form-control" name="category_id" id="category_id"
-												aria-describedby="category_id" placeholder="Loại hàng">
+											<label for="category_id">Loại</label> <select
+												class="form-control" id="category_id" th:selected="*{category}">
+												<option value="">-- Chọn loại hàng --</option>
+												<option th:each="category : ${categorys}"
+												th:value="${category.categoryId}"
+													th:text="${category.categoryName}"></option>
+											</select>
 										</div>
+
+
 										<div class="form-group  col-4">
-											<label for="price">Giá</label> <input type="password"
-												class="form-control" name="price" id="price"
+											<label for="price">Giá</label> <input type="text"
+												class="form-control" th:field="*{price}" id="price"
 												aria-describedby="passwordId" placeholder="Giá sản phẩm">
 
 										</div>
 										<div class="form-group  col-4">
 											<label for="quantity">Số lượng</label> <input type="text"
-												class="form-control" name="quantity" id="quantity"
+												class="form-control" th:field="*{quantity}" id="quantity"
 												aria-describedby="quantity" placeholder="Số lượng">
 
 										</div>
 										<div class="form-group  col-4">
-											<label for="discount">Giảm giá</label> <input type="password"
-												class="form-control" name="discount" id="discount"
+											<label for="discount">Giảm giá</label> <input type="text"
+												class="form-control" th:field="*{discount}" id="discount"
 												aria-describedby="discount" placeholder="Giảm giá">
 										</div>
 										<div class="form-group  col-4">
 											<label for="producer_id">ID Nhà sản xuất</label> <input
-												type="producer_id" class="form-control" name="producer_id"
-												id="producer_id" aria-describedby="producer_id"
-												placeholder="Mã nhà sản xuất">
+												type="text" class="form-control" id="producer_id"
+												aria-describedby="producer_id" placeholder="Mã nhà sản xuất">
 										</div>
 									</div>
 
 								</div>
 								<div class="card-footer text-muted">
-									<button class="btn btn-primary">Create</button>
-									<button class="btn btn-warning">Update</button>
-									<button class="btn btn-danger">Delete</button>
-									<button class="btn btn-info">Reset</button>
+									<button formaction="/admin/create" class="btn btn-primary">Create</button>
+									<button formaction="/admin/update" class="btn btn-warning">Update</button>
+									<button formaction="/admin/delete" class="btn btn-danger">Delete</button>
+									<button formaction="/admin/reset" class="btn btn-info">Reset</button>
 								</div>
 							</div>
 						</form>
@@ -141,7 +146,9 @@
 								<td th:text="${item.image}"></td>
 								<td th:text="${item.category.categoryName}"></td>
 								<td th:text="${item.producer.producerName}"></td>
-								<!-- <td><a th:href="@{/usermanagement/edit/(userId=${item.userId})}">Edit</a></td> -->
+								<td><a
+									th:href="@{/admin/edit/(productId=${item.productId})}">Edit</a>
+								</td>
 								<!-- Các cột khác -->
 							</tr>
 						</table>

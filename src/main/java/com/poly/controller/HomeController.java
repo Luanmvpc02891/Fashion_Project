@@ -12,23 +12,34 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.poly.entity.Category;
+import com.poly.entity.Product;
 import com.poly.entity.User;
+import com.poly.repository.CategoryRepository;
+import com.poly.repository.ProductRepository;
 import com.poly.repository.UserRepository;
 
 import jakarta.validation.Valid;
 
 @Controller
 public class HomeController {
+	@Autowired
+	UserRepository dao;
 
-//	@GetMapping("/shop")
-//	public String shop(Model model) {
-//		return "shop";
-//	}
-//
-//	@GetMapping("/detail")
-//	public String detal(Model model) {
-//		return "detail";
-//	}
+	@Autowired
+	ProductRepository dao1;
+
+	@Autowired
+	CategoryRepository dao2;
+	
+	@GetMapping("/index")
+	public String index(Model model) {
+		List<Product> product=dao1.findAll();
+		List<Category> category=dao2.findAll();
+		model.addAttribute("products", product);
+		model.addAttribute("categorys", category);
+		return "index";
+	}
 
 	@GetMapping("/cart")
 	public String cart(Model model) {
@@ -80,25 +91,24 @@ public class HomeController {
 		return "login";
 	}
 
-//	@PostMapping("/login")
-//	public String processLoginForm(@Valid @ModelAttribute("user") Users user, BindingResult result, Model model,
-//			@RequestParam("username") String username, @RequestParam("password") String password) {
-//		user = userRepository.findByUsername(username);
-//		if (user != null && user.getPassword().equals(password)) {
-//			return "redirect:/index";
-//		}
-//
-//		model.addAttribute("messages", "Đăng nhập thất bại");
-//		if (result.hasErrors()) {
-//			return "login";
-//		}
-//		return "login";
-//		
-//	}
+	@PostMapping("/login")
+	public String processLoginForm(@Valid @ModelAttribute("user") User user, BindingResult result, Model model,
+			@RequestParam("username") String username, @RequestParam("password") String password) {
+		user = dao.findByUsername(username);
 
-	@GetMapping("/index")
-	public String index() {
-		return "index";
+		if (user != null && user.getPassword().equals(password)) {
+			if (user.isRole() == true) {
+				return "redirect:/usermanagement";
+			} else
+				return "redirect:/index";
+		}
+
+		model.addAttribute("messages", "Đăng nhập thất bại");
+		if (result.hasErrors()) {
+			return "login";
+		}
+		return "login";
+
 	}
 
 }

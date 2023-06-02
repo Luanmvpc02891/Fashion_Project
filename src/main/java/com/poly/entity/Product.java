@@ -57,5 +57,7 @@ public class Product implements Serializable {
     @OneToOne(mappedBy = "product")
     private Inventory inventory;
     
+  
+
     // Constructors, getters, setters, and other properties
 }
