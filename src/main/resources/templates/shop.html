@@ -332,7 +332,8 @@
                             </div>
                             <div class="card-footer d-flex justify-content-between bg-light border">
                                 <a th:href="@{shop/{id}(id=${item.productId})}" class="btn btn-sm text-dark p-0"><i class="fas fa-eye text-primary mr-1"></i>View Detail</a>
-                                <a href="" class="btn btn-sm text-dark p-0"><i class="fas fa-shopping-cart text-primary mr-1"></i>Add To Cart</a>
+                                <a href="" class="btn btn-sm text-dark p-0"><i class="fas fa-shopping-cart text-primary mr-1" th:href="@{/cart/{productId}(productId=${item.productId})}"
+                                ></i>Add To Cart</a>
                             </div>
                         </div>
                     </div>

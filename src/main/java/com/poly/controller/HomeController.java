@@ -41,10 +41,6 @@ public class HomeController {
 		return "index";
 	}
 
-	@GetMapping("/cart")
-	public String cart(Model model) {
-		return "cart";
-	}
 
 	@GetMapping("/checkout")
 	public String checkout(Model model) {
