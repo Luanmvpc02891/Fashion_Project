@@ -39,6 +39,7 @@
 					<a class="text-dark" href="">FAQs</a> <span class="text-muted px-2">|</span>
 					<a class="text-dark" href="">Help</a> <span class="text-muted px-2">|</span>
 					<a class="text-dark" href="">Support</a>
+					<p>Cart ID: <span th:text="${cartId}"></span></p>
 				</div>
 			</div>
 			<div class="col-lg-6 text-center text-lg-right">
@@ -196,34 +197,39 @@
 							<th>Remove</th>
 						</tr>
 					</thead>
-					<tbody class="align-middle">
-						<tr th:each="item : ${item}">
+					<tbody class="align-middle ">
+						<tr th:each="item : ${cartProducts}">
 							<td class="align-middle"><img
-								th:src="@{'/getimage/'+${item.image}}" alt=""
-								style="width: 50px;" th:text="${item.productName}"></td>
-							<td class="align-middle" th:text="${item.price}"></td>
+								th:src="@{'/getimage/'+${item.product.image}}" alt=""
+								style="width: 50px;" th:text="${item.product.productName}">
+							</td>
+							<td class="align-middle" th:text="${item.product.price}"></td>
 							<td class="align-middle">
 								<div class="input-group quantity mx-auto" style="width: 100px;">
 									<div class="input-group-btn">
-										<button class="btn btn-sm btn-primary btn-minus">
+										<button class="btn btn-sm btn-primary btn-minus"
+											th:attr="onclick='updateQuantity(\'' + ${item.cartProductId} + '\', \'decrease\')'">
 											<i class="fa fa-minus"></i>
 										</button>
 									</div>
 									<input type="text"
 										class="form-control form-control-sm bg-secondary text-center"
-										th:value="${item.quantity}">
+										th:value="${item.quantity}" readonly>
 									<div class="input-group-btn">
-										<button class="btn btn-sm btn-primary btn-plus">
+										<button class="btn btn-sm btn-primary btn-plus"
+											th:attr="onclick='updateQuantity(\'' + ${item.cartProductId} + '\', \'increase\')'">
 											<i class="fa fa-plus"></i>
 										</button>
 									</div>
 								</div>
 							</td>
-							<td class="align-middle">$150</td>
-							<td class="align-middle"><button
-									class="btn btn-sm btn-primary">
-									<i class="fa fa-times"></i>
-								</button></td>
+
+							<td class="amount data-price"
+								th:text="${#numbers.formatInteger(item.quantity*item.product.price,0)}"></td>
+							<td class="align-middle"><a
+								th:href="@{/cart/delete/{cartProductId}(cartProductId=${item.cartProductId})}"
+								class="btn btn-sm btn-primary"> <i class="fa fa-times"></i>
+							</a></td>
 						</tr>
 					</tbody>
 				</table>
@@ -245,7 +251,7 @@
 					<div class="card-body">
 						<div class="d-flex justify-content-between mb-3 pt-1">
 							<h6 class="font-weight-medium">Subtotal</h6>
-							<h6 class="font-weight-medium">$150</h6>
+							<h6 class="font-weight-medium" th:text="${totalPrice}"></h6>
 						</div>
 						<div class="d-flex justify-content-between">
 							<h6 class="font-weight-medium">Shipping</h6>
@@ -379,6 +385,42 @@
 
 	<!-- Template Javascript -->
 	<script th:src="@{/js/main.js}"></script>
+	<!-- <script th:src="@{/js/quantity.js}"></script> -->
+	<!-- <script th:src="@{/js/quantity.js}"></script> -->
+	<script
+		src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+
+	<script th:inline="javascript">
+		/* <![CDATA[ */
+
+		$(document).ready(function() {
+			// Bắt sự kiện khi nhấn vào nút tăng giảm số lượng
+			$('.btn-minus, .btn-plus').click(function() {
+				var cartProductId = $(this).data('cartProductId');
+				var action = $(this).data('action');
+
+				updateQuantity(cartProductId, action);
+			});
+		});
+
+		// Hàm cập nhật số lượng sản phẩm
+		function updateQuantity(cartProductId, action) {
+			// Gửi yêu cầu AJAX tới URL /cart/update/{cartProductId}/{action}
+			$.ajax({
+				url : '/cart/update/' + cartProductId + '/' + action,
+				type : 'GET',
+				success : function(result) {
+					// Cập nhật lại bảng dữ liệu
+					$('.cart-table').html(result);
+				}
+			});
+		}
+
+		/* ]]> */
+	</script>
+
+
+
 </body>
 
 </html>

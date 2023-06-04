@@ -41,9 +41,33 @@
 					</ul>
 				</div>
 			</nav>
+			<div th:if="${not #strings.isEmpty(message)}" class="row">
+				<div class="col">
+					<div class="alert alert-success" th:text="${message}"></div>
+				</div>
+			</div>
+
+			<div th:if="${not #strings.isEmpty(error)}" class="row">
+				<div class="col">
+					<div class="alert alert-danger" th:text="${error}"></div>
+				</div>
+			</div>
 		</nav>
 		<section class="row">
 			<div class="col mt-4">
+
+				<div th:if="${not #strings.isEmpty(message)}" class="row">
+					<div class="col">
+						<div class="alert alert-success" th:text="${message}"></div>
+					</div>
+				</div>
+
+				<div th:if="${not #strings.isEmpty(error)}" class="row">
+					<div class="col">
+						<div class="alert alert-danger" th:text="${error}"></div>
+					</div>
+				</div>
+
 				<ul class="nav nav-tabs" id="myTab" role="tablist">
 					<li class="nav-item" role="presentation">
 						<button class="nav-link active" id="userEditing-tab"
@@ -61,7 +85,8 @@
 				<div class="tab-content" id="myTabContent">
 					<div class="tab-pane fade show active" id="userEditing"
 						role="tabpanel" aria-labelledby="userEditing-tab">
-						<form th:action="@{/admin}" th:object="${product}" method="post">
+						<form th:action="@{/admin}" th:object="${product}" method="post"
+							enctype="multipart/form-data">
 							<div class="card">
 								<div class="card-body">
 									<div class="row col">
@@ -76,17 +101,17 @@
 												id="product_name" aria-describedby="fullnameId"
 												placeholder="Tên sản phẩm">
 										</div>
-										<div class="form-group  col-4">
+										<div class="form-group col-4">
 											<label for="category_id">Loại</label> <select
-												class="form-control" id="category_id" th:selected="*{category}">
+												class="form-control" id="category_id"
+												th:selected="*{category}">
 												<option value="">-- Chọn loại hàng --</option>
 												<option th:each="category : ${categorys}"
-												th:value="${category.categoryId}"
-													th:text="${category.categoryName}"></option>
+													th:value="${category.categoryId}"
+													th:text="${category.categoryName}"
+													th:selected="${category.categoryId} == ${product?.category?.categoryId}"></option>
 											</select>
 										</div>
-
-
 										<div class="form-group  col-4">
 											<label for="price">Giá</label> <input type="text"
 												class="form-control" th:field="*{price}" id="price"
@@ -104,11 +129,30 @@
 												class="form-control" th:field="*{discount}" id="discount"
 												aria-describedby="discount" placeholder="Giảm giá">
 										</div>
-										<div class="form-group  col-4">
-											<label for="producer_id">ID Nhà sản xuất</label> <input
-												type="text" class="form-control" id="producer_id"
-												aria-describedby="producer_id" placeholder="Mã nhà sản xuất">
+										<div class="form-group col-4">
+											<label for="producer_id"> NSX</label> <select
+												class="form-control" id="producer_id"
+												th:selected="*{producer}">
+												<option value="">-- Chọn NSX --</option>
+												<option th:each="producer : ${producers}"
+													th:value="${producer.producerId}"
+													th:text="${producer.producerName}"
+													th:selected="${producer.producerId} == ${product?.producer?.producerId}"></option>
+											</select>
 										</div>
+										<div class="form-group col-4">
+											<label for="image">Hình ảnh</label> <img id="image-preview"
+												class="img-thumbnail" th:src="${product.image}"
+												alt="Preview Image"> <input type="file"
+												class="form-control img-fluid" id="image"
+												th:field="*{image}" name="image">
+										</div>
+
+										<input type="hidden" id="selectedCategory"
+											name="selectedCategory" th:value="${selectedCategory}" /> <input
+											type="hidden" id="selectedManufacturer"
+											name="selectedManufacturer"
+											th:value="${selectedManufacturer}" />
 									</div>
 
 								</div>
@@ -143,9 +187,14 @@
 								<td th:text="${item.price}"></td>
 								<td th:text="${item.quantity}"></td>
 								<td th:text="${item.discount}"></td>
-								<td th:text="${item.image}"></td>
-								<td th:text="${item.category.categoryName}"></td>
-								<td th:text="${item.producer.producerName}"></td>
+								<td th:text="${item.image}"></td>							<!-- 	<td><img class="img-fluid w-100" th:src="@{'file:///' + item.image}"alt=""> -->
+
+						
+								</td>
+								
+								
+								<td th:text="${item?.category?.categoryName}"></td>
+								<td th:text="${item?.producer?.producerName}"></td>
 								<td><a
 									th:href="@{/admin/edit/(productId=${item.productId})}">Edit</a>
 								</td>
@@ -177,6 +226,16 @@
 			event.preventDefault()
 			$(this).tab('show')
 		})
+		$(document).ready(function() {
+			$('#image').change(function() {
+				var file = $(this)[0].files[0];
+				var reader = new FileReader();
+				reader.onload = function(e) {
+					$('#image-preview').attr('src', e.target.result);
+				};
+				reader.readAsDataURL(file);
+			});
+		});
 	</script>
 </body>
 
