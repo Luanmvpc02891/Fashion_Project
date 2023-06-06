@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Thông báo mua hàng thành công</title>
+    <style>
+        /* CSS styling for the notification dialog */
+        .notification-dialog {
+            width: 400px;
+            padding: 20px;
+            background-color: #fff;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            text-align: center;
+            margin: 0 auto;
+            margin-top: 50px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+            opacity: 0;
+            transform: translateY(-20px);
+            transition: opacity 0.3s ease, transform 0.3s ease;
+        }
+
+        .notification-dialog.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .notification-dialog h2 {
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+
+        .notification-dialog p {
+            font-size: 18px;
+            margin-bottom: 20px;
+        }
+
+        .notification-dialog a {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+
+        .notification-dialog a:hover {
+            background-color: #45a049;
+        }
+    </style>
+    <script>
+        // JavaScript for showing the notification dialog
+        document.addEventListener("DOMContentLoaded", function() {
+            var dialog = document.querySelector(".notification-dialog");
+            dialog.classList.add("show");
+        });
+    </script>
+</head>
+<body>
+    <div class="notification-dialog">
+        <h2>Thông báo</h2>
+        <p>Bạn đã mua hàng thành công!</p>
+        <a class="btn btn-lg btn-block btn-primary font-weight-bold my-3 py-3" href="/checkout/add">Tiếp tục mua hàng</a>
+    </div>
+</body>
+</html>
