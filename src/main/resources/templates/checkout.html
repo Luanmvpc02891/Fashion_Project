@@ -468,7 +468,17 @@
 		</div>
 	</div>
 	<!-- Footer End -->
-
+ <script th:inline="javascript">
+        /*<![CDATA[*/
+        // Lắng nghe sự kiện click vào nút "Place Order"
+        const placeOrderButton = document.querySelector('.btn-primary');
+        placeOrderButton.addEventListener('click', function(event) {     
+        
+          // Hiển thị thông báo mua hàng thành công
+          alert('Mua hàng thành công!');
+        });
+        /*]]>*/
+    </script>
 
 	<!-- Back to Top -->
 	<a href="#" class="btn btn-primary back-to-top"><i
