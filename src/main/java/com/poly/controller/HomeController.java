@@ -52,15 +52,12 @@ public class HomeController {
 		return "contact";
 	}
 
-//	@GetMapping("/admin")
-//	public String admin(Model model) {
-//		return "admin";
-//	}
 
-	@GetMapping("/inventory")
-	public String inventory(Model model) {
-		return "inventory";
-	}
+
+
+
+
+
 
 	/* Dang ky */
 
@@ -87,35 +84,5 @@ public class HomeController {
 	    return "login";
 	}
 
-//	@PostMapping("/login")
-//	public String processLoginForm(@Valid @ModelAttribute("user") User user, BindingResult result, Model model,
-//	        @RequestParam("username") String username, @RequestParam("password") String password, HttpSession session) {
-//
-//	    User authenticatedUser = dao.findByUsername(username);
-//
-//	    if (authenticatedUser != null && authenticatedUser.getPassword().equals(password)) {
-//	        // Tạo giỏ hàng riêng cho người dùng và lưu vào session
-//	        Map<Long, cartDto> cart = (Map<Long, cartDto>) session.getAttribute("cart_" + authenticatedUser.getUserId());
-//	        if (cart == null) {
-//	            cart = new HashMap<>();
-//	            session.setAttribute("cart_" + authenticatedUser.getUserId(), cart);
-//	        }
-//
-//	        if (authenticatedUser.isRole()) {
-//	            session.setAttribute("currentUser", authenticatedUser);
-//	            return "redirect:/usermanagement";
-//	        } else {
-//	            session.setAttribute("currentUser", authenticatedUser);
-//	            return "redirect:/index";
-//	        }
-//	    }
-//
-//	    model.addAttribute("messages", "Đăng nhập thất bại");
-//	    if (result.hasErrors()) {
-//	        return "login";
-//	    }
-//
-//	    return "login";
-//	}
 
 }
