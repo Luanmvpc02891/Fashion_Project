@@ -52,30 +52,9 @@ public class HomeController {
 		return "contact";
 	}
 
-
-
-
-
-
-
-
-	/* Dang ky */
-
-	/*
-	 * @Autowired private UserRepository userRepository;
-	 * 
-	 * @GetMapping("/dangky") public String showRegistrationForm(Model model) {
-	 * model.addAttribute("user", new Users()); return "dangky"; }
-	 */
-
-//	@PostMapping("/dangky")
-//	public String processRegistrationForm(@Valid @ModelAttribute("user") Users user, BindingResult result) {
-//		if (result.hasErrors()) {
-//			return "dangky";
-//		} else {
-//			userRepository.save(user);
-//			return "redirect:/login";
-//		}
+//	@GetMapping("/inventory")
+//	public String inventory(Model model) {
+//		return "inventory";
 //	}
 
 	@GetMapping("/login")
