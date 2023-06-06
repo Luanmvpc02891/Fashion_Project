@@ -26,6 +26,9 @@ public class CartProduct implements Serializable{
     @ManyToOne
     @JoinColumn(name = "cart_id")
     private Cart cart;
+     
+    @Column(name = "status")
+    private boolean status;
     
     @ManyToOne
     @JoinColumn(name = "product_id")

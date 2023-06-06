@@ -90,6 +90,7 @@ public class CartController {
 						cartProduct.setProduct(product);
 						cartProduct.setQuantity(1); // Số lượng mặc định là 1
 						cartProduct.setCart(cart);
+						cartProduct.setStatus(false);
 						cartProductRepo.save(cartProduct);
 					}
 				}
@@ -131,7 +132,7 @@ public class CartController {
 				model.addAttribute("totalPrice", totalPrice);
 			}
 		}
-		return "cart";
+		return "redirect:/cart";
 	}
 
 	@GetMapping("/cart/update/{cartProductId}/{action}")

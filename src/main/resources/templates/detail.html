@@ -192,7 +192,7 @@
 					<div class="carousel-inner border">
 						<div class="carousel-item active">
 							<img class="img-fluid w-100"
-								th:src="@{'/getimage/'+${item.image}}" alt="">
+								th:src="@{'/uploads/' + ${item.image.substring(11)}}" alt="Product Image">
 						</div>
 
 					</div>
@@ -461,7 +461,7 @@
 						<div
 							class="card-header product-img position-relative overflow-hidden bg-transparent border p-0">
 							<img class="img-fluid w-100"
-								th:src="@{'/getimage/'+${item.image}}" alt="">
+								th:src="@{'/uploads/' + ${item.image.substring(11)}}" alt="Product Image">
 						</div>
 						<div
 							class="card-body border-left border-right text-center p-0 pt-4 pb-3">

@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.poly.entity.Cart;
+import com.poly.entity.CartProduct;
 import com.poly.entity.Category;
 import com.poly.entity.Product;
 import com.poly.entity.User;
@@ -52,10 +53,7 @@ public class HomeController {
 		return "index";
 	}
 
-	@GetMapping("/checkout")
-	public String checkout(Model model) {
-		return "checkout";
-	}
+
 
 	@GetMapping("/contact")
 	public String contact(Model model) {

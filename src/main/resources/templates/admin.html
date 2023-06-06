@@ -41,22 +41,11 @@
 					</ul>
 				</div>
 			</nav>
-			<div th:if="${not #strings.isEmpty(message)}" class="row">
-				<div class="col">
-					<div class="alert alert-success" th:text="${message}"></div>
-				</div>
-			</div>
-
-			<div th:if="${not #strings.isEmpty(error)}" class="row">
-				<div class="col">
-					<div class="alert alert-danger" th:text="${error}"></div>
-				</div>
-			</div>
 		</nav>
+
 		<section class="row">
 			<div class="col mt-4">
-
-				<div th:if="${not #strings.isEmpty(message)}" class="row">
+					<div th:if="${not #strings.isEmpty(message)}" class="row">
 					<div class="col">
 						<div class="alert alert-success" th:text="${message}"></div>
 					</div>
@@ -93,7 +82,8 @@
 										<div class="form-group col-4">
 											<label for="product_id">ID</label> <input type="text"
 												class="form-control" th:field="*{productId}" id="product_id"
-												aria-describedby="product_id" placeholder="ID sản phẩm">
+												aria-describedby="product_id" placeholder="ID sản phẩm"
+												readonly>
 										</div>
 										<div class="form-group  col-4">
 											<label for="product_name">Tên sản phẩm</label> <input
@@ -103,7 +93,7 @@
 										</div>
 										<div class="form-group col-4">
 											<label for="category_id">Loại</label> <select
-												class="form-control" id="category_id"
+												class="form-control" id="category_id" name="category_id"
 												th:selected="*{category}">
 												<option value="">-- Chọn loại hàng --</option>
 												<option th:each="category : ${categorys}"
@@ -131,7 +121,7 @@
 										</div>
 										<div class="form-group col-4">
 											<label for="producer_id"> NSX</label> <select
-												class="form-control" id="producer_id"
+												class="form-control" id="producer_id" name="producer_id"
 												th:selected="*{producer}">
 												<option value="">-- Chọn NSX --</option>
 												<option th:each="producer : ${producers}"
@@ -158,8 +148,10 @@
 								</div>
 								<div class="card-footer text-muted">
 									<button formaction="/admin/create" class="btn btn-primary">Create</button>
-									<button formaction="/admin/update" class="btn btn-warning">Update</button>
-									<button formaction="/admin/delete" class="btn btn-danger">Delete</button>
+									<button formaction="/admin/update" class="btn btn-warning"
+										onclick="return confirmUpdate()">Update</button>
+									<button formaction="/admin/delete" class="btn btn-danger"
+										onclick="return confirmDelete()">Delete</button>
 									<button formaction="/admin/reset" class="btn btn-info">Reset</button>
 								</div>
 							</div>
@@ -176,6 +168,7 @@
 								<td>Giá</td>
 								<td>Số lượng</td>
 								<td>Giảm giá</td>
+								<td>Tên ảnh</td>
 								<td>Hình Ảnh</td>
 								<td>Loại</td>
 								<td>ID Nhà sản xuất</td>
@@ -187,12 +180,8 @@
 								<td th:text="${item.price}"></td>
 								<td th:text="${item.quantity}"></td>
 								<td th:text="${item.discount}"></td>
-								<td th:text="${item.image}"></td>							<!-- 	<td><img class="img-fluid w-100" th:src="@{'file:///' + item.image}"alt=""> -->
-
-						
-								</td>
-								
-								
+								<td th:text="${item.image}"></td>
+								<td><img width="10%" th:src="@{'/uploads/' + ${item.image.substring(11)}}" alt="Product Image"></td>
 								<td th:text="${item?.category?.categoryName}"></td>
 								<td th:text="${item?.producer?.producerName}"></td>
 								<td><a
@@ -236,6 +225,13 @@
 				reader.readAsDataURL(file);
 			});
 		});
+		function confirmUpdate() {
+			return confirm("Bạn có chắc chắn muốn cập nhật sản phẩm?");
+		}
+
+		function confirmDelete() {
+			return confirm("Bạn có chắc chắn muốn xóa sản phẩm?");
+		}
 	</script>
 </body>
 
