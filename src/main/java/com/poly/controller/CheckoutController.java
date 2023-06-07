@@ -9,11 +9,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 
 import com.poly.entity.Cart;
 import com.poly.entity.CartProduct;
 import com.poly.entity.Order;
 import com.poly.entity.OrderItem;
+import com.poly.entity.User;
 import com.poly.repository.CartRepository;
 import com.poly.repository.Cart_ProductRepo;
 import com.poly.repository.OrderItemRepository;
@@ -129,6 +131,13 @@ public class CheckoutController {
 			// Chuyển hướng người dùng đến trang lỗi hoặc trang thông báo lỗi
 			return "redirect:/shop";
 		}
+	}
+	
+
+	@GetMapping("/OrderItem")
+	public String LoadOrder(Model model) {
+		model.addAttribute("OrderItems", orderItemRepository.findAll()); // Truyền danh sách dữ liệu vào model
+		return "OrderItem"; // Trả
 	}
 
 }

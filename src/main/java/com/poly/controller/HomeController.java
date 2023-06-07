@@ -53,17 +53,12 @@ public class HomeController {
 		return "index";
 	}
 
-
-
 	@GetMapping("/contact")
 	public String contact(Model model) {
 		return "contact";
 	}
 
-	@GetMapping("/inventory")
-	public String inventory(Model model) {
-		return "inventory";
-	}
+
 
 	@GetMapping("/login")
 	public String showLoginForm(Model model) {
