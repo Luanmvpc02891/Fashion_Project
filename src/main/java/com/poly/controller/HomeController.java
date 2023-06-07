@@ -60,11 +60,6 @@ public class HomeController {
 		return "contact";
 	}
 
-	@GetMapping("/inventory")
-	public String inventory(Model model) {
-		return "inventory";
-	}
-
 
 	@GetMapping("/login")
 	public String showLoginForm(Model model) {

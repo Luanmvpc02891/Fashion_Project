@@ -10,5 +10,5 @@ public class InventoryController {
 	@GetMapping("/inventory")
 	public String inventory(Model model) {
 		return "inventory";
-	}>>>>>>>dev
+	}
 }
