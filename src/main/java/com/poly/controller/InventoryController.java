@@ -31,12 +31,14 @@ public class InventoryController {
 	}
 
 	@GetMapping("/inventory/edit/")
-	public String usermanagement_edit(Model model, @RequestParam("inventoryId") int inventoryId, Inventory inventory) {
-		inventory = RepoInventory.findById(inventoryId).get();
-		model.addAttribute("inventorys", RepoInventory.findAll());
-		List<Product> product1 = RepoProduct.findAll();
-		model.addAttribute("products", product1);
-		return "inventory"; // Trả
+	public String usermanagement_edit(Model model, @RequestParam("inventoryId") int inventoryId) {
+	    Inventory inventory = RepoInventory.findById(inventoryId).get();
+	    model.addAttribute("inventorys", RepoInventory.findAll());
+	    List<Product> product1 = RepoProduct.findAll();
+	    model.addAttribute("inventory", inventory);
+	    model.addAttribute("products", product1);
+	    return "inventory";
 	}
+
 
 }
