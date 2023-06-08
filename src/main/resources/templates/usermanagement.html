@@ -148,12 +148,12 @@
 								<td>IsAtive</td>
 								<td>&nbsp;</td>
 							</tr>
-							<tr th:each="item : ${users}">
+							<tr th:each="item : ${users}" th:unless="${item.isative == false}">
 								<td th:text="${item.userId}"></td>
 								<td th:text="${item.username}"></td>
 								<td th:text="${item.email}"></td>
 								<td th:text="${item.role}"></td>
-								<td th:text="${item.isative}"></td>
+								
 								<td><a
 									th:href="@{/usermanagement/edit/(userId=${item.userId})}">Edit</a>
 								</td>

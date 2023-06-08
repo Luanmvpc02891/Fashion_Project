@@ -174,7 +174,7 @@
 								<td>ID Nhà sản xuất</td>
 								<td>&nbsp;</td>
 							</tr>
-							<tr th:each="item : ${products}">
+							<tr th:each="item : ${products}" th:unless="${item.active == false}">
 								<td th:text="${item.productId}"></td>
 								<td th:text="${item.productName}"></td>
 								<td th:text="${item.price}"></td>

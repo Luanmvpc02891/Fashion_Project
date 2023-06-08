@@ -41,6 +41,9 @@ public class Product implements Serializable {
     @Column(name = "image")
     private String image;
     
+    @Column(name = "active")
+    private boolean active;
+    
     @ManyToOne
     @JoinColumn(name = "category_id")
     private Category category;

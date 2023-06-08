@@ -91,7 +91,7 @@ public class HomeController {
 
 				// Lưu cartId vào session
 				request.getSession().setAttribute("cartId", cart.getCartId());
-
+				request.getSession().setAttribute("user", user);
 				return "redirect:/index";
 			}
 		}
