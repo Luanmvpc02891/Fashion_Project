@@ -118,22 +118,21 @@ public class InventoryController {
 	        // Xử lý khi dữ liệu không hợp lệ
 	        // return "update-inventory";
 	    }
-
 	    try {
 	        Inventory existingInventory = RepoInventory.findById(inventory.getInventoryId()).orElse(null);
 	        if (existingInventory != null) {
-	            // Cập nhật các trường thông tin của kho
-	            existingInventory.setQuantity(inventory.getQuantity());
-	            existingInventory.setAddress(inventory.getAddress());
-
 	            // Cập nhật thông tin sản phẩm
 	            Product product = RepoProduct.findById(productId).orElse(null);
 	            if (product != null) {
 	                existingInventory.setProduct(product);
 	            } else {
 	                model.addAttribute("error", "Sản phẩm không tồn tại");
+	              
 	                return "inventory";
-	            }
+	            }         
+	            // Cập nhật các trường thông tin của kho
+	            existingInventory.setQuantity(inventory.getQuantity());
+	            existingInventory.setAddress(inventory.getAddress());
 
 	            RepoInventory.save(existingInventory);
 
@@ -152,11 +151,15 @@ public class InventoryController {
 	        model.addAttribute("productId", null); // Đặt lại giá trị productId thành null
 	    } catch (Exception e) {
 	        e.printStackTrace();
+	      
 	        model.addAttribute("error", e);
 	    }
-
-	    return "inventory";
+	    
+	    return "redirect:/inventory";
 	}
+
+
+
 
 
 

@@ -67,7 +67,7 @@
 									<div class="row col">
 										<div class="form-group col-4">
 											<label for="username">ID</label> <input type="text"
-												class="form-control" id="id" aria-describedby="id" 
+												class="form-control" name="inventoryId" id="id" aria-describedby="id" 
 												placeholder="Id kho" readonly th:value="${inventory?.inventoryId}" 
 												>
 										</div>
@@ -110,28 +110,26 @@
 					</div>
 
 
-					<div class="tab-pane fade" id="userList" role="tabpanel"
-						aria-labelledby="userList-tab">
-						<table class="table table-stripe">
-							<tr>
-								<td>ID</td>
-								<td>ID Sản Phẩm</td>
-								<td>Số lượng</td>
-								<td>Địa chỉ</td>
-								<td>&nbsp;</td>
-							</tr>
-							<tr th:each="item : ${inventorys}">
-								<td th:text="${item.inventoryId}"></td>
-								<td th:text="${item.product.productId}"></td>
-								<td th:text="${item.quantity}"></td>
-								<td th:text="${item.address}"></td>
-								<td><a
-									th:href="@{/inventory/edit/(inventoryId=${item.inventoryId})}">Edit</a>
-								</td>
-								<!-- Các cột khác -->
-							</tr>
-						</table>
-					</div>
+					<div class="tab-pane fade" id="userList" role="tabpanel" aria-labelledby="userList-tab">
+    <table class="table table-striped">
+        <tr>
+            <td>ID</td>
+            <td>ID Sản Phẩm</td>
+            <td>Số lượng</td>
+            <td>Địa chỉ</td>
+            <td>&nbsp;</td>
+        </tr>
+        <tr th:each="item : ${inventorys}">
+            <td th:text="${item.inventoryId}"></td>
+            <td th:text="${item.product.productId}"></td>
+            <td th:text="${item.quantity}"></td>
+            <td th:text="${item.address}"></td>
+            <td><a th:href="@{/inventory/edit/(inventoryId=${item.inventoryId})}">Edit</a></td>
+            <!-- Các cột khác -->
+        </tr>
+    </table>
+</div>
+
 				</div>
 			</div>
 		</section>
