@@ -13,6 +13,9 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
 import lombok.Data;
 
 @Entity
@@ -28,9 +31,11 @@ public class Inventory implements Serializable{
     @JoinColumn(name = "product_id")
     private Product product;
     
+    @NotNull(message = "NotNull.inventory.quantity")
     @Column(name = "quantity")
-    private int quantity;
+    private Integer quantity;
     
+    @NotBlank(message = "NotBlank.inventory.address")
     @Column(name = "address")
     private String address;
     

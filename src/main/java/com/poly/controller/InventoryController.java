@@ -33,7 +33,8 @@ public class InventoryController {
 	ProductRepository RepoProduct;
 
 	@GetMapping("/inventory")
-	public String inventory(Model model, @ModelAttribute("productt") Product productt) {
+	public String inventory(Model model, @ModelAttribute("productt") Product productt, 
+			@ModelAttribute("inventory") Inventory inventory) {
 		model.addAttribute("inventorys", RepoInventory.findAll());
 		List<Product> product1 = RepoProduct.findAll();
 		model.addAttribute("products", product1);
