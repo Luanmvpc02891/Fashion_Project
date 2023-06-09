@@ -68,12 +68,13 @@
 										<div class="form-group col-4">
 											<label for="username">ID</label> <input type="text"
 												class="form-control" id="id" aria-describedby="id" 
-												placeholder="Id kho" th:value="${inventory?.inventoryId}" >
+												placeholder="Id kho" readonly th:value="${inventory?.inventoryId}" 
+												>
 										</div>
 
 										<div class="form-group col-4">
 											<label for="fullname">ID sản phẩm</label><select
-												class="form-control" name="product">
+												class="form-control" id="product" name="product">
 												<option value="">-- Chọn ID hàng --</option>
 												<option th:each="product : ${products}"
 													th:text="${product.productId}"
@@ -86,12 +87,13 @@
 									<div class="row col">
 										<div class="form-group  col-4">
 											<label for="password">Số lượng</label> <input type="text"
-												class="form-control" id="quantity"
+												class="form-control" id="quantity" name= "quantity"
 												aria-describedby="quantity" placeholder="Số lượng" th:value="${inventory?.quantity}" >
+												
 										</div>
 										<div class="form-group  col-4">
 											<label for="email">Địa chỉ</label> <input type="text"
-												class="form-control" id="address" aria-describedby="address"
+												class="form-control" id="address" name="address" aria-describedby="address"
 												placeholder="Địa chỉ kho"  th:value="${inventory?.address}">
 
 										</div>
@@ -99,7 +101,7 @@
 								</div>
 								<div class="card-footer text-muted">
 									<button formaction="/inventory/create" class="btn btn-primary">Create</button>
-									<button class="btn btn-warning">Update</button>
+									<button formaction="/inventory/update" class="btn btn-warning">Update</button>
 									<button formaction="/inventory/delete" class="btn btn-danger">Delete</button>
 									<button formaction="/inventory/reset" class="btn btn-info">Reset</button>
 								</div>
