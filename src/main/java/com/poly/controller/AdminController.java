@@ -34,20 +34,21 @@ public class AdminController {
 	}
 
 	@PostMapping("/usermanagement/create")
-	public String usermanagement_create( @Valid @ModelAttribute("user")User user, BindingResult result, Model model) {
+	public String usermanagement_create(@Valid @ModelAttribute("user") User user, BindingResult result, Model model) {
 		if (result.hasErrors()) {
 			return "usermanagement"; // Trả
-		}else {
-		RepoUser.save(user);
-		model.addAttribute("message", "Create success ");
-		model.addAttribute("users", RepoUser.findAll()); // Truyền danh sách dữ liệu vào model
-		return "usermanagement";
+		} else {
+			user.setIsative(true);
+			RepoUser.save(user);
+			model.addAttribute("message", "Create success ");
+			model.addAttribute("users", RepoUser.findAll()); // Truyền danh sách dữ liệu vào model
+			return "usermanagement";
 		}
 	}
 
 	@PostMapping("/usermanagement/update")
 	public String usermanagement_update(@ModelAttribute("user") User user, BindingResult result, Model model) {
-
+		user.setIsative(true);
 		RepoUser.save(user);
 		model.addAttribute("message", "Update success ");
 		model.addAttribute("users", RepoUser.findAll()); // Truyền danh sách dữ liệu vào model
@@ -60,10 +61,11 @@ public class AdminController {
 			model.addAttribute("error", "Not UserId");
 
 		} else {
+			user.setIsative(false);
 			RepoUser.save(user);
 			model.addAttribute("message", "Delete success ");
 		}
-		RepoUser.deleteById(userId);
+		// RepoUser.deleteById(userId);
 		usermanagement_reset(model);
 		model.addAttribute("users", RepoUser.findAll()); // Truyền danh sách dữ liệu vào model
 		return "usermanagement"; // Trả

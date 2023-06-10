@@ -2,8 +2,12 @@ package com.poly.controller;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -18,12 +22,15 @@ import com.poly.entity.CartProduct;
 import com.poly.entity.Category;
 import com.poly.entity.Product;
 import com.poly.entity.User;
+
 import com.poly.repository.CartRepository;
 import com.poly.repository.CategoryRepository;
 import com.poly.repository.ProductRepository;
 import com.poly.repository.UserRepository;
+import com.poly.service.SessionService;
 
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 
@@ -44,22 +51,29 @@ public class HomeController {
 	@Autowired
 	HttpServletRequest request;
 
+	@Autowired
+	SessionService session;
+
 	@GetMapping("/index")
-	public String index(Model model) {
-		List<Product> product = dao1.findAll();
-		List<Category> category = dao2.findAll();
-		model.addAttribute("products", product);
-		model.addAttribute("categorys", category);
+	public String index(Model model, @RequestParam("p") Optional<Integer> p) {
+		Pageable pageable = PageRequest.of(p.orElse(0), 5);
+		Page<Product> page = dao1.findAll(pageable);
+		model.addAttribute("products", page);
 		return "index";
 	}
 
-
+	@GetMapping("/index/page")
+	public String index2(Model model, @RequestParam("p") Optional<Integer> p) {
+		Pageable pageable = PageRequest.of(p.orElse(0), 5);
+		Page<Product> page = dao1.findAll(pageable);
+		model.addAttribute("products", page);
+		return "index";
+	}
 
 	@GetMapping("/contact")
 	public String contact(Model model) {
 		return "contact";
 	}
-
 
 	@GetMapping("/login")
 	public String showLoginForm(Model model) {
@@ -69,7 +83,9 @@ public class HomeController {
 
 	@PostMapping("/login")
 	public String processLoginForm(@Valid @ModelAttribute("user") User user, BindingResult result, Model model,
-			@RequestParam("username") String username, @RequestParam("password") String password) {
+			@RequestParam("username") String username, @RequestParam("password") String password,
+			HttpServletRequest request, HttpServletResponse response) {
+
 		user = dao.findByUsername(username);
 
 		if (user != null && user.getPassword().equals(password)) {
@@ -89,9 +105,11 @@ public class HomeController {
 					// Nếu đã có giỏ hàng, sử dụng lại giỏ hàng đó
 					cart = user.getCarts().get(0);
 				}
-
+				session.set("userSession", user);
+				System.out.println(user.getUsername());
 				// Lưu cartId vào session
 				request.getSession().setAttribute("cartId", cart.getCartId());
+				request.getSession().setAttribute("user", user.getUsername());
 
 				return "redirect:/index";
 			}
@@ -104,6 +122,7 @@ public class HomeController {
 		return "login";
 	}
 
+	// Các phương thức xử lý khác trong controller
 
 	@GetMapping("/logout")
 	public String logout(HttpSession session) {

@@ -33,7 +33,7 @@ public class InventoryController {
 	ProductRepository RepoProduct;
 
 	@GetMapping("/inventory")
-	public String inventory(Model model, @ModelAttribute("productt") Product productt, 
+	public String inventory(Model model, @ModelAttribute("productt") Product productt,
 			@ModelAttribute("inventory") Inventory inventory) {
 		model.addAttribute("inventorys", RepoInventory.findAll());
 		List<Product> product1 = RepoProduct.findAll();
@@ -57,117 +57,107 @@ public class InventoryController {
 		// Xử lý sau khi xóa sản phẩm
 		return "redirect:/inventory";
 	}
+
 	@PostMapping("/inventory/reset")
 	public String reset(Model model) {
-	    Inventory inventory = new Inventory();
-	    model.addAttribute("inventory", inventory);
-	    List<Inventory> inventorys = RepoInventory.findAll();
-	    List<Product> products = RepoProduct.findAll();
-	    model.addAttribute("inventorys", inventorys);
-	    model.addAttribute("products", products);
-	    model.addAttribute("productId", null); // Đặt lại giá trị productId thành null
+		Inventory inventory = new Inventory();
+		model.addAttribute("inventory", inventory);
+		List<Inventory> inventorys = RepoInventory.findAll();
+		List<Product> products = RepoProduct.findAll();
+		model.addAttribute("inventorys", inventorys);
+		model.addAttribute("products", products);
+		model.addAttribute("productId", null); // Đặt lại giá trị productId thành null
 
-	    return "inventory";
+		return "inventory";
 	}
-
-
 
 	@PostMapping("/inventory/create")
 	public String createInventory(@ModelAttribute("inventory") @Valid Inventory inventory,
-	        BindingResult bindingResult, @RequestParam("product") int productId, Model model) {
-	    if (bindingResult.hasErrors()) {
-	        // Xử lý khi dữ liệu không hợp lệ, ví dụ: hiển thị thông báo lỗi và trả về trang "inventory"
-	        model.addAttribute("error", "Invalid data");
-	        model.addAttribute("inventorys", RepoInventory.findAll());
-	        List<Product> products = RepoProduct.findAll();
-	        model.addAttribute("products", products);
-	        return "inventory";
-	    }
+			BindingResult bindingResult, @RequestParam("product") int productId, Model model) {
+		if (bindingResult.hasErrors()) {
+			// Xử lý khi dữ liệu không hợp lệ, ví dụ: hiển thị thông báo lỗi và trả về trang
+			// "inventory"
+			model.addAttribute("error", "Invalid data");
+			model.addAttribute("inventorys", RepoInventory.findAll());
+			List<Product> products = RepoProduct.findAll();
+			model.addAttribute("products", products);
+			return "inventory";
+		}
 
-	    try {
-	        Product product = RepoProduct.findById(productId).orElse(null);
-	        if (product == null) {
-	            model.addAttribute("error", "Product not found");
-	            return "inventory";
-	        }
-	        
-	        inventory.setProduct(product);
-	        RepoProduct.save(product);
-	        RepoInventory.save(inventory);
+		try {
+			Product product = RepoProduct.findById(productId).orElse(null);
+			if (product == null) {
+				model.addAttribute("error", "Product not found");
+				return "inventory";
+			}
 
-	        model.addAttribute("message", "Create success");
-	        model.addAttribute("inventorys", RepoInventory.findAll());
-	        List<Product> products = RepoProduct.findAll();
-	        model.addAttribute("products", products);
-	        model.addAttribute("inventory", new Inventory());
-	        model.addAttribute("products", new ArrayList<Product>());
+			inventory.setProduct(product);
+			RepoProduct.save(product);
+			RepoInventory.save(inventory);
 
-	    } catch (Exception e) {
-	        e.printStackTrace();
-	        model.addAttribute("error", e.getMessage());
-	        model.addAttribute("error", null);
-	        model.addAttribute("message", null);
+			model.addAttribute("message", "Create success");
+			model.addAttribute("inventorys", RepoInventory.findAll());
+			List<Product> products = RepoProduct.findAll();
+			model.addAttribute("products", products);
+			model.addAttribute("inventory", new Inventory());
+			model.addAttribute("products", new ArrayList<Product>());
 
-	    }
+		} catch (Exception e) {
+			e.printStackTrace();
+			model.addAttribute("error", e.getMessage());
+			model.addAttribute("error", null);
+			model.addAttribute("message", null);
 
-	    return "inventory";
+		}
+
+		return "inventory";
 	}
+
 	@PostMapping("/inventory/update")
 	public String updateInventory(@Valid @ModelAttribute("inventory") Inventory inventory, BindingResult bindingResult,
-	        Model model, @RequestParam("product") int productId) {
-	    if (bindingResult.hasErrors()) {
-	        // Xử lý khi dữ liệu không hợp lệ
-	        // return "update-inventory";
-	    }
-	    try {
-	        Inventory existingInventory = RepoInventory.findById(inventory.getInventoryId()).orElse(null);
-	        if (existingInventory != null) {
-	            // Cập nhật thông tin sản phẩm
-	            Product product = RepoProduct.findById(productId).orElse(null);
-	            if (product != null) {
-	                existingInventory.setProduct(product);
-	            } else {
-	                model.addAttribute("error", "Sản phẩm không tồn tại");
-	              
-	                return "inventory";
-	            }         
-	            // Cập nhật các trường thông tin của kho
-	            existingInventory.setQuantity(inventory.getQuantity());
-	            existingInventory.setAddress(inventory.getAddress());
+			Model model, @RequestParam("product") int productId) {
+		if (bindingResult.hasErrors()) {
+			// Xử lý khi dữ liệu không hợp lệ
+			// return "update-inventory";
+		}
+		try {
+			Inventory existingInventory = RepoInventory.findById(inventory.getInventoryId()).orElse(null);
+			if (existingInventory != null) {
+				// Cập nhật thông tin sản phẩm
+				Product product = RepoProduct.findById(productId).orElse(null);
+				if (product != null) {
+					existingInventory.setProduct(product);
+				} else {
+					model.addAttribute("error", "Sản phẩm không tồn tại");
 
-	            RepoInventory.save(existingInventory);
+					return "inventory";
+				}
+				// Cập nhật các trường thông tin của kho
+				existingInventory.setQuantity(inventory.getQuantity());
+				existingInventory.setAddress(inventory.getAddress());
 
-	            model.addAttribute("message", "Cập nhật thành công");
-	        } else {
-	            model.addAttribute("error", "Kho không tồn tại");
-	            return "inventory";
-	        }
+				RepoInventory.save(existingInventory);
 
-	        // Load lại danh sách kho và các thông tin khác để hiển thị trên giao diện
-	        List<Inventory> inventorys = RepoInventory.findAll();
-	        List<Product> products = RepoProduct.findAll();
-	        model.addAttribute("inventorys", inventorys);
-	        model.addAttribute("products", products);
-	        model.addAttribute("inventory", new Inventory()); // Đặt lại đối tượng inventory rỗng
-	        model.addAttribute("productId", null); // Đặt lại giá trị productId thành null
-	    } catch (Exception e) {
-	        e.printStackTrace();
-	      
-	        model.addAttribute("error", e);
-	    }
-	    
-	    return "redirect:/inventory";
+				model.addAttribute("message", "Cập nhật thành công");
+			} else {
+				model.addAttribute("error", "Kho không tồn tại");
+				return "inventory";
+			}
+
+			// Load lại danh sách kho và các thông tin khác để hiển thị trên giao diện
+			List<Inventory> inventorys = RepoInventory.findAll();
+			List<Product> products = RepoProduct.findAll();
+			model.addAttribute("inventorys", inventorys);
+			model.addAttribute("products", products);
+			model.addAttribute("inventory", new Inventory()); // Đặt lại đối tượng inventory rỗng
+			model.addAttribute("productId", null); // Đặt lại giá trị productId thành null
+		} catch (Exception e) {
+			e.printStackTrace();
+
+			model.addAttribute("error", e);
+		}
+
+		return "redirect:/inventory";
 	}
-
-
-
-
-
-
-
-
-
-
-
 
 }

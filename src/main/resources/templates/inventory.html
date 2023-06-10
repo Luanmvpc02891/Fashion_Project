@@ -1,6 +1,7 @@
 <!doctype html>
 <html xmlns:th="http://www.thymeleaf.org"
-	xmlns:c="http://java.sun.com/jsp/jstl/core">
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="admin.html">
 
 <head>
 <title>Title</title>
@@ -19,30 +20,8 @@
 
 <body>
 	<main class="container-fluid">
-		<nav class="row">
-			<nav class="navbar navbar-expand-sm navbar-light  bg-light col">
-				<a class="navbar-brand" href="#">Administration</a>
-				<button class="navbar-toggler d-lg-none" type="button"
-					data-toggle="collapse" data-target="#collapsibleNavId"
-					aria-controls="collapsibleNavId" aria-expanded="false"
-					aria-label="Toggle navigation">
-					<span class="navbar-toggler-icon"></span>
-				</button>
-				<div class="collapse navbar-collapse text-center"
-					id="collapsibleNavId">
-					<ul class="navbar-nav text-center mr-auto mt-2 mt-lg-0">
-						<li class="nav-item active"><a class="nav-link"
-							th:href="@{/admin}">Product</a></li>
-						<li class="nav-item"><a class="nav-link"
-							th:href="@{/usermanagement}">User</a></li>
-						<li class="nav-item"><a class="nav-link" href="#">Inventory</a>
-						</li>
 
-					</ul>
-				</div>
-			</nav>
-		</nav>
-		<section class="row">
+		<section layout:fragment="content">
 			<div class="col mt-4">
 				<ul class="nav nav-tabs" id="myTab" role="tablist">
 					<li class="nav-item" role="presentation">
