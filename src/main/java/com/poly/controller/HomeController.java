@@ -1,4 +1,4 @@
-package com.poly.controller;
+	package com.poly.controller;
 
 import java.util.Date;
 import java.util.List;
@@ -18,12 +18,15 @@ import com.poly.entity.CartProduct;
 import com.poly.entity.Category;
 import com.poly.entity.Product;
 import com.poly.entity.User;
+
 import com.poly.repository.CartRepository;
 import com.poly.repository.CategoryRepository;
 import com.poly.repository.ProductRepository;
 import com.poly.repository.UserRepository;
+import com.poly.service.SessionService;
 
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 
@@ -43,7 +46,10 @@ public class HomeController {
 
 	@Autowired
 	HttpServletRequest request;
-
+	
+	@Autowired
+	SessionService session;
+	
 	@GetMapping("/index")
 	public String index(Model model) {
 		List<Product> product = dao1.findAll();
@@ -53,13 +59,10 @@ public class HomeController {
 		return "index";
 	}
 
-
-
 	@GetMapping("/contact")
 	public String contact(Model model) {
 		return "contact";
 	}
-
 
 	@GetMapping("/login")
 	public String showLoginForm(Model model) {
@@ -69,7 +72,9 @@ public class HomeController {
 
 	@PostMapping("/login")
 	public String processLoginForm(@Valid @ModelAttribute("user") User user, BindingResult result, Model model,
-			@RequestParam("username") String username, @RequestParam("password") String password) {
+			@RequestParam("username") String username, @RequestParam("password") String password,
+			HttpServletRequest request, HttpServletResponse response) {
+
 		user = dao.findByUsername(username);
 
 		if (user != null && user.getPassword().equals(password)) {
@@ -89,10 +94,10 @@ public class HomeController {
 					// Nếu đã có giỏ hàng, sử dụng lại giỏ hàng đó
 					cart = user.getCarts().get(0);
 				}
-
+				session.set("userSession", user);
+				System.out.println(user.getUsername());
 				// Lưu cartId vào session
 				request.getSession().setAttribute("cartId", cart.getCartId());
-
 				return "redirect:/index";
 			}
 		}
@@ -104,6 +109,7 @@ public class HomeController {
 		return "login";
 	}
 
+	// Các phương thức xử lý khác trong controller
 
 	@GetMapping("/logout")
 	public String logout(HttpSession session) {
