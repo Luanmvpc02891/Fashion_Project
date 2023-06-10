@@ -2,8 +2,12 @@ package com.poly.controller;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -45,20 +49,26 @@ public class HomeController {
 	HttpServletRequest request;
 
 	@GetMapping("/index")
-	public String index(Model model) {
-		List<Product> product = dao1.findAll();
-		List<Category> category = dao2.findAll();
-		model.addAttribute("products", product);
-		model.addAttribute("categorys", category);
+	public String index(Model model,@RequestParam("p") Optional<Integer> p) {
+		Pageable pageable = PageRequest.of(p.orElse(0), 5);
+		Page<Product> page = dao1.findAll(pageable);
+		model.addAttribute("products", page);
 		return "index";
 	}
-
+	@GetMapping("/index/page")
+	public String index2(Model model, @RequestParam("p") Optional<Integer> p) {
+		Pageable pageable = PageRequest.of(p.orElse(0), 5);
+		Page<Product> page = dao1.findAll(pageable);
+		model.addAttribute("products", page);
+		return "index";
+	}
+	
+	
+	
 	@GetMapping("/contact")
 	public String contact(Model model) {
 		return "contact";
 	}
-
-
 
 	@GetMapping("/login")
 	public String showLoginForm(Model model) {
@@ -91,7 +101,7 @@ public class HomeController {
 
 				// Lưu cartId vào session
 				request.getSession().setAttribute("cartId", cart.getCartId());
-				request.getSession().setAttribute("user", user);
+				request.getSession().setAttribute("user", user.getUsername());
 				return "redirect:/index";
 			}
 		}

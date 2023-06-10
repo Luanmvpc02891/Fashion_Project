@@ -58,7 +58,7 @@ public class ProductController {
 //		return "shop";
 //	}
 	
-	@RequestMapping("/shop")
+	@GetMapping("/shop")
 	public String paginate1(Model model, @RequestParam("p") Optional<Integer> p) {
 		Pageable pageable = PageRequest.of(p.orElse(0), 5);
 		Page<Product> page = dao.findAll(pageable);
@@ -66,15 +66,13 @@ public class ProductController {
 		return "shop";
 	}
 
-	@RequestMapping("/shop/page1")
+	@GetMapping("/shop/page1")
 	public String paginate(Model model, @RequestParam("p") Optional<Integer> p) {
 	Pageable pageable = PageRequest.of(p.orElse(0), 5);
 	Page<Product> page = dao.findAll(pageable);
 	model.addAttribute("products", page);
 	return "shop";
 	}
-	
-	
 
 	@GetMapping("/shop/{productId}")
 	public String detal(Model model, @PathVariable int productId) {
@@ -141,7 +139,7 @@ public class ProductController {
 
 			product.setCategory(category1);
 			product.setProducer(producer1);
-
+			product.setActive(true);
 			dao.save(product);
 
 			model.addAttribute("message", "Create success");
