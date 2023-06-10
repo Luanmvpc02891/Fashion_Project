@@ -89,7 +89,10 @@
 											<label for="product_name">Tên sản phẩm</label> <input
 												type="text" class="form-control" th:field="*{productName}"
 												id="product_name" aria-describedby="fullnameId"
-												placeholder="Tên sản phẩm">
+												placeholder="Tên sản phẩm" > 
+												 <small id="productName" class="form-text "
+												th:if="${#fields.hasErrors('productName')}"
+												th:errors="*{productName}" style="color: red;"></small>
 										</div>
 										<div class="form-group col-4">
 											<label for="category_id">Loại</label> <select
@@ -106,12 +109,18 @@
 											<label for="price">Giá</label> <input type="text"
 												class="form-control" th:field="*{price}" id="price"
 												aria-describedby="passwordId" placeholder="Giá sản phẩm">
+												 <small id="price" class="form-text "
+												th:if="${#fields.hasErrors('price')}"
+												th:errors="*{price}" style="color: red;"></small>
 
 										</div>
 										<div class="form-group  col-4">
-											<label for="quantity">Số lượng</label> <input type="text"
+											<label for="quantity">Số lượng</label> <input type="number"
 												class="form-control" th:field="*{quantity}" id="quantity"
 												aria-describedby="quantity" placeholder="Số lượng">
+												 <small id="quantity" class="form-text "
+												th:if="${#fields.hasErrors('quantity')}"
+												th:errors="*{quantity}" style="color: red;"></small>
 
 										</div>
 										<div class="form-group  col-4">
@@ -136,6 +145,7 @@
 												alt="Preview Image"> <input type="file"
 												class="form-control img-fluid" id="image"
 												th:field="*{image}" name="image">
+												
 										</div>
 
 										<input type="hidden" id="selectedCategory"

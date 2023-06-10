@@ -91,7 +91,7 @@
 												aria-describedby="quantity" placeholder="Số lượng" th:value="${inventory?.quantity}" >
 												 <small id="quantity" class="form-text "
 												th:if="${#fields.hasErrors('quantity')}"
-												th:errors="*{quantity}"></small>
+												th:errors="*{quantity}" style="color: red;"></small>
 										</div>
 										<div class="form-group  col-4">
 											<label for="email">Địa chỉ</label> <input type="text"
@@ -99,12 +99,12 @@
 												placeholder="Địa chỉ kho"  th:value="${inventory?.address}">
 												<small id="address" class="form-text "
 												th:if="${#fields.hasErrors('address')}"
-												th:errors="*{address}" ></small>
+												th:errors="*{address}"style="color: red;" ></small>
 										</div>
 									</div>
 								</div>
 								<div class="card-footer text-muted">
-									<button formaction="/inventory/create" class="btn btn-primary">Create</button>
+									<button formaction="/inventory/create" class="btn btn-primary"  >Create</button>
 									<button formaction="/inventory/update" class="btn btn-warning">Update</button>
 									<button formaction="/inventory/delete" class="btn btn-danger">Delete</button>
 									<button formaction="/inventory/reset" class="btn btn-info">Reset</button>
@@ -157,4 +157,5 @@
 			event.preventDefault()
 			$(this).tab('show')
 		})
+		
 	</script>

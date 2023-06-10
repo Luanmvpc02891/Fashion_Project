@@ -32,6 +32,7 @@ public class Inventory implements Serializable{
     private Product product;
     
     @NotNull(message = "NotNull.inventory.quantity")
+    @Positive(message = "Quantity must be positive")
     @Column(name = "quantity")
     private Integer quantity;
     
