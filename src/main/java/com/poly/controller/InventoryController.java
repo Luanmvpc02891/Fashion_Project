@@ -51,12 +51,6 @@ public class InventoryController {
 		return "inventory";
 	}
 
-	@PostMapping("/inventory/delete")
-	public String delete(@RequestParam("inventoryId") int inventoryId, Model model) {
-		RepoInventory.deleteById(inventoryId);
-		// Xử lý sau khi xóa sản phẩm
-		return "redirect:/inventory";
-	}
 
 	@PostMapping("/inventory/reset")
 	public String reset(Model model) {
@@ -90,7 +84,7 @@ public class InventoryController {
 				model.addAttribute("error", "Product not found");
 				return "inventory";
 			}
-
+			inventory.setActive(true);
 			inventory.setProduct(product);
 			RepoProduct.save(product);
 			RepoInventory.save(inventory);
@@ -135,7 +129,7 @@ public class InventoryController {
 				// Cập nhật các trường thông tin của kho
 				existingInventory.setQuantity(inventory.getQuantity());
 				existingInventory.setAddress(inventory.getAddress());
-
+				existingInventory.setActive(true);
 				RepoInventory.save(existingInventory);
 
 				model.addAttribute("message", "Cập nhật thành công");
@@ -160,4 +154,47 @@ public class InventoryController {
 		return "redirect:/inventory";
 	}
 
+	
+	@PostMapping("/inventory/delete")
+	public String deleteInventory(@ModelAttribute("inventory") Inventory inventory,
+			Model model, @RequestParam("product") int productId) {
+		try {
+			Inventory existingInventory = RepoInventory.findById(inventory.getInventoryId()).orElse(null);
+			if (existingInventory != null) {
+				// Cập nhật thông tin sản phẩm
+				Product product = RepoProduct.findById(productId).orElse(null);
+				if (product != null) {
+					existingInventory.setProduct(product);
+				} else {
+					model.addAttribute("error", "Sản phẩm không tồn tại");
+
+					return "inventory";
+				}
+				// Cập nhật các trường thông tin của kho
+				existingInventory.setQuantity(inventory.getQuantity());
+				existingInventory.setAddress(inventory.getAddress());
+				existingInventory.setActive(false);
+				RepoInventory.save(existingInventory);
+
+				model.addAttribute("message", "Xoá thành công");
+			} else {
+				model.addAttribute("error", "Kho không tồn tại");
+				return "inventory";
+			}
+
+			// Load lại danh sách kho và các thông tin khác để hiển thị trên giao diện
+			List<Inventory> inventorys = RepoInventory.findAll();
+			List<Product> products = RepoProduct.findAll();
+			model.addAttribute("inventorys", inventorys);
+			model.addAttribute("products", products);
+			model.addAttribute("inventory", new Inventory()); // Đặt lại đối tượng inventory rỗng
+			model.addAttribute("productId", null); // Đặt lại giá trị productId thành null
+		} catch (Exception e) {
+			e.printStackTrace();
+
+			model.addAttribute("error", e);
+		}
+
+		return "redirect:/inventory";
+	}
 }

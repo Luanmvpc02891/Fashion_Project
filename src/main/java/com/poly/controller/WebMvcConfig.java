@@ -6,16 +6,16 @@ import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 
-@Configuration
-public class WebMvcConfig implements WebMvcConfigurer {
-	@Autowired
-	AuthInterceptor auth;
-
-	@Override
-	public void addInterceptors(InterceptorRegistry registry) {
-		registry.addInterceptor(auth)
-			.addPathPatterns("/admin","/usermanagement/**","/inventory/**","/cart/**");
-		
-	}
-}
+//@Configuration
+//public class WebMvcConfig implements WebMvcConfigurer {
+//	@Autowired
+//	AuthInterceptor auth;
+//
+//	@Override
+//	public void addInterceptors(InterceptorRegistry registry) {
+//		registry.addInterceptor(auth)
+//			.addPathPatterns("/admin/**","/usermanagement/**","/inventory/**","/cart/**");
+//		
+//	}
+//}
 	

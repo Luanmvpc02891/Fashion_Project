@@ -26,7 +26,7 @@ public class AuthInterceptor implements HandlerInterceptor {
 			response.sendRedirect("/login");
 			return false;
 		} else if (user.isRole()) {
-			return false;
+			return true;
 		}
 		return true;
 	}

@@ -90,7 +90,8 @@ public class HomeController {
 
 		if (user != null && user.getPassword().equals(password)) {
 			if (user.isRole()) {
-				return "redirect:/usermanagement";
+				session.set("userSession", user);
+				return "redirect:/admin";
 			} else {
 				// Kiểm tra xem người dùng đã có giỏ hàng trước đó hay chưa
 				Cart cart = null;

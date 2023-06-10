@@ -102,7 +102,7 @@
             <td>Địa chỉ</td>
             <td>&nbsp;</td>
         </tr>
-        <tr th:each="item : ${inventorys}">
+        <tr th:each="item : ${inventorys}" th:unless="${item.active == false}">
             <td th:text="${item.inventoryId}"></td>
             <td th:text="${item.product.productId}"></td>
             <td th:text="${item.quantity}"></td>

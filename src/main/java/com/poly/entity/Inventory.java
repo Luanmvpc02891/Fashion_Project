@@ -40,5 +40,7 @@ public class Inventory implements Serializable{
     @Column(name = "address")
     private String address;
     
+    @Column(name = "active")
+    private boolean active;
     // Constructors, getters, setters, and other properties
 }
