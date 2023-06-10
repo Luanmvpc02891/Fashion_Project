@@ -77,8 +77,8 @@ public class ProductController {
 	}
 
 	@RequestMapping("/shop/seach2")
-	public String searchAndPage(Model model, @RequestParam("keywords") String kw) {
-		if(kw=="") {
+	public String searchAndPage(Model model, @RequestParam("keywords") String kw,Product product) {
+		if(kw.equals(null)||!kw.equals(product.getProductName())) {
 			List<Product> product1 = dao.findAll();
 			model.addAttribute("products", product1);
 		}else {
@@ -86,11 +86,6 @@ public class ProductController {
 			model.addAttribute("products", product1);
 		}
 		return "shop";	
-	public String paginate1(Model model, @RequestParam("p") Optional<Integer> p) {
-		Pageable pageable = PageRequest.of(p.orElse(0), 5);
-		Page<Product> page = dao.findAll(pageable);
-		model.addAttribute("products", page);
-		return "shop";
 	}
 
 	@GetMapping("/shop/page1")
