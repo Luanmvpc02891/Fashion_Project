@@ -17,10 +17,17 @@ public interface ProductRepository extends JpaRepository<Product, Integer> {
 
 	void deleteById(int id);
 
+
 	@Query("SELECT o FROM Product o WHERE o.category.id LIKE ?1")
 	List<Product> getByCategory(int value);
 
 	@Query("SELECT o FROM Product o WHERE o.productName LIKE ?1")
 	List<Product> findAllByNameLike(String keywords);
+
+	@Query("SELECT p.category.categoryName, COUNT(p) FROM Product p GROUP BY p.category.categoryName")
+	List<Object[]> countProductsByCategory();
+
+	@Query("SELECT p.producer.producerName, COUNT(p) FROM Product p GROUP BY p.producer.producerName")
+	List<Object[]> countProductsByProducer();
 
 }

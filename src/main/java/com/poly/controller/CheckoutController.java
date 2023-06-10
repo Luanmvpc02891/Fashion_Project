@@ -1,6 +1,7 @@
 package com.poly.controller;
 
 import java.math.BigDecimal;
+import java.security.Principal;
 import java.util.Date;
 import java.util.List;
 import java.util.ArrayList;
@@ -9,15 +10,19 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 
 import com.poly.entity.Cart;
 import com.poly.entity.CartProduct;
 import com.poly.entity.Order;
 import com.poly.entity.OrderItem;
+import com.poly.entity.User;
 import com.poly.repository.CartRepository;
 import com.poly.repository.Cart_ProductRepo;
 import com.poly.repository.OrderItemRepository;
 import com.poly.repository.OrderRepository;
+import com.poly.repository.UserRepository;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
@@ -39,6 +44,9 @@ public class CheckoutController {
 
 	@Autowired
 	Cart_ProductRepo cartProductRepo;
+	
+	@Autowired
+	UserRepository userDao;
 
 	private Double calculateTotalPrice(List<CartProduct> cartProducts) {
 		Double totalPrice = 0.0;
@@ -130,5 +138,62 @@ public class CheckoutController {
 			return "redirect:/shop";
 		}
 	}
+	
+
+	@GetMapping("/order")
+	public String LoadOrder(Model model) {
+		model.addAttribute("OrderItems", orderItemRepository.findAll());
+		model.addAttribute("Orders", orderRepository.findAll());// Truyền danh sách dữ liệu vào model
+		return "order"; // Trả
+	}
+
+	@GetMapping("/OrderItem")
+	public String loadOrders(Model model) {
+	    // Lấy tên người dùng 
+		String Userid = (String) request.getSession().getAttribute("user");
+
+	    // Tìm người dùng trong cơ sở dữ liệu dựa vào tên người dùng
+	    User user = userDao.findByUsername(Userid);
+
+	    if (user != null) {
+	        // Lấy danh sách đơn hàng của người dùng
+	        List<Order> orders = orderRepository.findByUser(user);
+
+	        // Thêm danh sách đơn hàng vào model để hiển thị trên giao diện
+	        model.addAttribute("orders", orders);
+	    }
+
+	    return "OrderItem";
+	}
+	
+	@GetMapping("/OrderItem/{orderId}")
+	public String loadOrderDetails(Model model, @PathVariable("orderId") Integer orderId) {
+	    // Tìm đơn hàng dựa vào orderId
+	    Order order = orderRepository.findById(orderId).orElse(null);
+
+	    if (order != null) {
+	        // Lấy danh sách chi tiết đơn hàng của đơn hàng
+	        List<OrderItem> orderDetails = orderItemRepository.findByOrder(order);
+
+	        // Thêm đơn hàng và danh sách chi tiết vào model để hiển thị trên giao diện
+	        model.addAttribute("order", order);
+	        model.addAttribute("orderDetails", orderDetails);
+	        
+	    }
+		String Userid = (String) request.getSession().getAttribute("user");
+
+	    // Tìm người dùng trong cơ sở dữ liệu dựa vào tên người dùng
+	    User user = userDao.findByUsername(Userid);
+
+	    if (user != null) {
+	        // Lấy danh sách đơn hàng của người dùng
+	        List<Order> orders = orderRepository.findByUser(user);
+
+	        // Thêm danh sách đơn hàng vào model để hiển thị trên giao diện
+	        model.addAttribute("orders", orders);
+	    }
+	    return "OrderItem";
+	}
+
 
 }

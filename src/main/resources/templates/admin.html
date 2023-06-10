@@ -1,6 +1,6 @@
 <!doctype html>
 <html xmlns:th="http://www.thymeleaf.org"
-	xmlns:c="http://java.sun.com/jsp/jstl/core">
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
 
 <head>
 <title>Title</title>
@@ -31,21 +31,25 @@
 				<div class="collapse navbar-collapse text-center"
 					id="collapsibleNavId">
 					<ul class="navbar-nav text-center mr-auto mt-2 mt-lg-0">
-						<li class="nav-item active"><a class="nav-link" href="#">Product<span
-								class="sr-only">(current)</span></a></li>
+						<li class="nav-item active"><a class="nav-link"
+							th:href="@{/admin}">Product<span class="sr-only">(current)</span></a></li>
 						<li class="nav-item"><a class="nav-link"
 							th:href="@{/usermanagement}">User</a></li>
 						<li class="nav-item"><a class="nav-link"
 							th:href="@{/inventory}">Inventory</a></li>
-
+						<li class="nav-item"><a class="nav-link"
+							th:href="@{/Revenue}">Revenue</a></li>
+						<li class="nav-item"><a class="nav-link"
+							th:href="@{/statistics}">Statistics</a></li>
+						<li class="nav-item"><a class="nav-link" th:href="@{/order}">Order</a></li>
 					</ul>
 				</div>
 			</nav>
 		</nav>
 
-		<section class="row">
+		<div layout:fragment="content">
 			<div class="col mt-4">
-					<div th:if="${not #strings.isEmpty(message)}" class="row">
+				<div th:if="${not #strings.isEmpty(message)}" class="row">
 					<div class="col">
 						<div class="alert alert-success" th:text="${message}"></div>
 					</div>
@@ -174,14 +178,17 @@
 								<td>ID Nhà sản xuất</td>
 								<td>&nbsp;</td>
 							</tr>
-							<tr th:each="item : ${products}">
+							<tr th:each="item : ${products}"
+								th:unless="${item.active == false}">
 								<td th:text="${item.productId}"></td>
 								<td th:text="${item.productName}"></td>
 								<td th:text="${item.price}"></td>
 								<td th:text="${item.quantity}"></td>
 								<td th:text="${item.discount}"></td>
 								<td th:text="${item.image}"></td>
-								<td><img width="10%" th:src="@{'/uploads/' + ${item.image.substring(11)}}" alt="Product Image"></td>
+								<td><img width="10%"
+									th:src="@{'/uploads/' + ${item.image.substring(11)}}"
+									alt="Product Image"></td>
 								<td th:text="${item?.category?.categoryName}"></td>
 								<td th:text="${item?.producer?.producerName}"></td>
 								<td><a
@@ -194,7 +201,7 @@
 					</div>
 				</div>
 			</div>
-		</section>
+		</div>
 		<footer class="row"></footer>
 	</main>
 	<!-- Optional JavaScript -->
@@ -233,6 +240,8 @@
 			return confirm("Bạn có chắc chắn muốn xóa sản phẩm?");
 		}
 	</script>
+	<!-- <script src="js/quantity.js"></script> -->
+	<script src="js/quantity.js"></script>
 </body>
 
 </html>
