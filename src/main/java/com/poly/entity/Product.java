@@ -15,8 +15,7 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.*;
 import lombok.Data;
 
 @Entity
@@ -32,17 +31,20 @@ public class Product implements Serializable {
     @Column(name = "product_name")
     private String productName;
     
+    @DecimalMin(value = "0.00",inclusive = false, message = "DecimalMin.product.price")
     @Column(name = "price")
     private BigDecimal price;
     
-    @NotNull(message = "NotNull.product.quantity")
+   @NotNull(message = "NotNull.product.quantity")
     @Column(name = "quantity")
-    private int  quantity;
+    private Integer  quantity;
     
+   @DecimalMin(value = "0.00",inclusive = false, message = "DecimalMin.product.discout")
     @Column(name = "discount")
     private BigDecimal discount;
     
-    @NotBlank(message= "NotBlank.product.image")
+   @NotBlank(message= "NotBlank.product.image")
+    @NotNull(message = "lỗi")
     @Column(name = "image")
     private String image;
     

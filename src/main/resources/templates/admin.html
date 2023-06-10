@@ -106,27 +106,30 @@
 											</select>
 										</div>
 										<div class="form-group  col-4">
-											<label for="price">Giá</label> <input type="text"
+											<label for="price">Giá</label> <input type="number"
 												class="form-control" th:field="*{price}" id="price"
-												aria-describedby="passwordId" placeholder="Giá sản phẩm">
-												 <small id="price" class="form-text "
+												aria-describedby="price" placeholder="Giá sản phẩm">
+												<small id="price" class="form-text "
 												th:if="${#fields.hasErrors('price')}"
-												th:errors="*{price}" style="color: red;"></small>
+												th:errors="*{price}" style="color: red;"></small> 
 
 										</div>
 										<div class="form-group  col-4">
 											<label for="quantity">Số lượng</label> <input type="number"
 												class="form-control" th:field="*{quantity}" id="quantity"
 												aria-describedby="quantity" placeholder="Số lượng">
-												 <small id="quantity" class="form-text "
+										 <small id="quantity" class="form-text "
 												th:if="${#fields.hasErrors('quantity')}"
-												th:errors="*{quantity}" style="color: red;"></small>
+												th:errors="*{quantity}" style="color: red;"></small> 
 
 										</div>
 										<div class="form-group  col-4">
 											<label for="discount">Giảm giá</label> <input type="text"
 												class="form-control" th:field="*{discount}" id="discount"
 												aria-describedby="discount" placeholder="Giảm giá">
+												<small id="discount" class="form-text "
+												th:if="${#fields.hasErrors('discount')}"
+												th:errors="discount" style="color: red;"></small> 
 										</div>
 										<div class="form-group col-4">
 											<label for="producer_id"> NSX</label> <select
