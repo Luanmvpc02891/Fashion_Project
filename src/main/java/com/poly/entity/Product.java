@@ -31,20 +31,23 @@ public class Product implements Serializable {
     @Column(name = "product_name")
     private String productName;
     
-    @DecimalMin(value = "0.00",inclusive = false, message = "DecimalMin.product.price")
+    
     @Column(name = "price")
+    @NotNull(message = "NotNull.product.price")
+    @Positive(message = "Price must be positive")
     private BigDecimal price;
     
    @NotNull(message = "NotNull.product.quantity")
+   @Positive(message = "Price must be positive")
     @Column(name = "quantity")
     private Integer  quantity;
     
-   @DecimalMin(value = "0.00",inclusive = false, message = "DecimalMin.product.discout")
+   @NotNull(message = "NotNull.product.discount")
+   @Positive(message = "discount must be positive")
     @Column(name = "discount")
     private BigDecimal discount;
     
-   @NotBlank(message= "NotBlank.product.image")
-    @NotNull(message = "lỗi")
+   
     @Column(name = "image")
     private String image;
     
