@@ -60,7 +60,7 @@ public class ProductController {
 //		// model.addAttribute("products", dao.findAll());
 //		return "shop";
 //	}
-	
+
 	@GetMapping("/shop")
 	public String shop(Model model, @RequestParam("value") int value) {
 		List<Product> product1 = dao.getByCategory(value);
@@ -77,23 +77,31 @@ public class ProductController {
 	}
 
 	@RequestMapping("/shop/seach2")
-	public String searchAndPage(Model model, @RequestParam("keywords") String kw,Product product) {
-		if(kw.equals(null)||!kw.equals(product.getProductName())) {
-			List<Product> product1 = dao.findAll();
-			model.addAttribute("products", product1);
-		}else {
-			List<Product> product1 = dao.findAllByNameLike("%" + kw + "%");
-			model.addAttribute("products", product1);
+	public String searchAndPage(Model model, @RequestParam("keywords") String kw) {
+		List<Product> products;
+
+		if (kw.isEmpty()) {
+			products = dao.findAll();
+		} else {
+			products = dao.findAllByNameLike("%" + kw + "%");
 		}
-		return "shop";	
+		if (products.isEmpty()) {
+			List<Product> product1 = dao.findAll();
+	        model.addAttribute("message", "Không có sản phẩm phù hợp.");
+			model.addAttribute("products", product1);
+		} else {
+			model.addAttribute("products", products);
+		}
+		return "shop";
 	}
 
 	@GetMapping("/shop/page1")
 	public String paginate(Model model, @RequestParam("p") Optional<Integer> p) {
-	Pageable pageable = PageRequest.of(p.orElse(0), 5);
-	Page<Product> page = dao.findAll(pageable);
-	model.addAttribute("products", page);
-	return "shop";
+		Pageable pageable = PageRequest.of(p.orElse(0), 5);
+		Page<Product> page = dao.findAll(pageable);
+		System.out.println(page.getNumber());
+		model.addAttribute("products", page);
+		return "shop";
 	}
 
 	@GetMapping("/shop/{productId}")
@@ -196,23 +204,23 @@ public class ProductController {
 				existingProduct.setQuantity(product.getQuantity());
 				existingProduct.setDiscount(product.getDiscount());
 
-	            // Cập nhật danh mục và nhà sản xuất
-	            Category category = dao1.findById(categoryId).orElse(null);
-	            Producer producer = producerRepo.findById(producerId).orElse(null);
-	            existingProduct.setCategory(category);
-	            existingProduct.setProducer(producer);
-	            existingProduct.setActive(true);
-	            if (!imageFile.isEmpty()) {
-	                // Xử lý file hình ảnh nếu có thay đổi
-	                String fileName = imageFile.getOriginalFilename();
-	                String uploadDir = "C:/uploads";
-	                File directory = new File(uploadDir);
-	                if (!directory.exists()) {
-	                    directory.mkdirs();
-	                }
-	                String filePath = uploadDir + "/" + fileName;
-	                File dest = new File(filePath);
-	                imageFile.transferTo(dest);
+				// Cập nhật danh mục và nhà sản xuất
+				Category category = dao1.findById(categoryId).orElse(null);
+				Producer producer = producerRepo.findById(producerId).orElse(null);
+				existingProduct.setCategory(category);
+				existingProduct.setProducer(producer);
+				existingProduct.setActive(true);
+				if (!imageFile.isEmpty()) {
+					// Xử lý file hình ảnh nếu có thay đổi
+					String fileName = imageFile.getOriginalFilename();
+					String uploadDir = "C:/uploads";
+					File directory = new File(uploadDir);
+					if (!directory.exists()) {
+						directory.mkdirs();
+					}
+					String filePath = uploadDir + "/" + fileName;
+					File dest = new File(filePath);
+					imageFile.transferTo(dest);
 
 					// Cập nhật đường dẫn hình ảnh
 					existingProduct.setImage(filePath);
@@ -240,67 +248,66 @@ public class ProductController {
 		return "admin";
 	}
 
-	
 	@PostMapping("/admin/delete")
 	public String deleteProduct(@Valid @ModelAttribute("product") Product product, BindingResult bindingResult,
-	        Model model, @RequestParam("image") MultipartFile imageFile, @RequestParam("category_id") int categoryId,
-	        @RequestParam("producer_id") int producerId) {
-	    if (bindingResult.hasErrors()) {
-	        // Xử lý khi dữ liệu không hợp lệ
-	        // return "update-product";
-	    }
+			Model model, @RequestParam("image") MultipartFile imageFile, @RequestParam("category_id") int categoryId,
+			@RequestParam("producer_id") int producerId) {
+		if (bindingResult.hasErrors()) {
+			// Xử lý khi dữ liệu không hợp lệ
+			// return "update-product";
+		}
 
-	    try {
-	        Product existingProduct = dao.findById(product.getProductId()).orElse(null);
-	        if (existingProduct != null) {
-	            // Cập nhật các trường thông tin của sản phẩm
-	            existingProduct.setProductName(product.getProductName());
-	            existingProduct.setPrice(product.getPrice());
-	            existingProduct.setQuantity(product.getQuantity());
-	            existingProduct.setDiscount(product.getDiscount());
+		try {
+			Product existingProduct = dao.findById(product.getProductId()).orElse(null);
+			if (existingProduct != null) {
+				// Cập nhật các trường thông tin của sản phẩm
+				existingProduct.setProductName(product.getProductName());
+				existingProduct.setPrice(product.getPrice());
+				existingProduct.setQuantity(product.getQuantity());
+				existingProduct.setDiscount(product.getDiscount());
 
-	            // Cập nhật danh mục và nhà sản xuất
-	            Category category = dao1.findById(categoryId).orElse(null);
-	            Producer producer = producerRepo.findById(producerId).orElse(null);
-	            existingProduct.setCategory(category);
-	            existingProduct.setProducer(producer);
-	            existingProduct.setActive(false);
-	            if (!imageFile.isEmpty()) {
-	                // Xử lý file hình ảnh nếu có thay đổi
-	                String fileName = imageFile.getOriginalFilename();
-	                String uploadDir = "C:/uploads";
-	                File directory = new File(uploadDir);
-	                if (!directory.exists()) {
-	                    directory.mkdirs();
-	                }
-	                String filePath = uploadDir + "/" + fileName;
-	                File dest = new File(filePath);
-	                imageFile.transferTo(dest);
+				// Cập nhật danh mục và nhà sản xuất
+				Category category = dao1.findById(categoryId).orElse(null);
+				Producer producer = producerRepo.findById(producerId).orElse(null);
+				existingProduct.setCategory(category);
+				existingProduct.setProducer(producer);
+				existingProduct.setActive(false);
+				if (!imageFile.isEmpty()) {
+					// Xử lý file hình ảnh nếu có thay đổi
+					String fileName = imageFile.getOriginalFilename();
+					String uploadDir = "C:/uploads";
+					File directory = new File(uploadDir);
+					if (!directory.exists()) {
+						directory.mkdirs();
+					}
+					String filePath = uploadDir + "/" + fileName;
+					File dest = new File(filePath);
+					imageFile.transferTo(dest);
 
-	                // Cập nhật đường dẫn hình ảnh
-	                existingProduct.setImage(filePath);
-	            }
+					// Cập nhật đường dẫn hình ảnh
+					existingProduct.setImage(filePath);
+				}
 
-	            dao.save(existingProduct);
+				dao.save(existingProduct);
 
-	            model.addAttribute("message", "delete success");
-	        } else {
-	            model.addAttribute("error", "Product not found");
-	        }
+				model.addAttribute("message", "delete success");
+			} else {
+				model.addAttribute("error", "Product not found");
+			}
 
-	        // Load lại danh sách sản phẩm và các thông tin khác để hiển thị trên giao diện
-	        List<Product> products = dao.findAll();
-	        List<Category> categories = dao1.findAll();
-	        List<Producer> producers = producerRepo.findAll();
-	        model.addAttribute("products", products);
-	        model.addAttribute("categorys", categories);
-	        model.addAttribute("producers", producers);
-	    } catch (IOException e) {
-	        e.printStackTrace();
-	        model.addAttribute("error", e);
-	    }
+			// Load lại danh sách sản phẩm và các thông tin khác để hiển thị trên giao diện
+			List<Product> products = dao.findAll();
+			List<Category> categories = dao1.findAll();
+			List<Producer> producers = producerRepo.findAll();
+			model.addAttribute("products", products);
+			model.addAttribute("categorys", categories);
+			model.addAttribute("producers", producers);
+		} catch (IOException e) {
+			e.printStackTrace();
+			model.addAttribute("error", e);
+		}
 
-	    return "admin";
+		return "admin";
 	}
 
 //	@PostMapping("/admin/delete")
@@ -310,7 +317,7 @@ public class ProductController {
 //		// Xử lý sau khi xóa sản phẩm
 //		return "redirect:/admin";
 //	}
-    
+
 	@PostMapping("/admin/reset")
 	public String reset(Model model) {
 		Product product = new Product();

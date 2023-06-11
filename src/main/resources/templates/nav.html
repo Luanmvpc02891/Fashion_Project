@@ -43,10 +43,15 @@
 		<div class="col-lg-3 col-6 text-right">
 			<a href="" class="btn border"> <i
 				class="fas fa-heart text-primary"></i> <span class="badge">0</span>
-			</a> <a th:href="@{/cart}" class="btn border"> <i
+			</a> <a th:href="@{/cart}" class="btn border"
+				th:if="${session.userSession != null}"> <i
+				class="fas fa-shopping-cart text-primary"></i> <span class="badge">0</span>
+			</a> <a href="/login" class="btn border"
+				th:unless="${session.userSession != null}"> <i
 				class="fas fa-shopping-cart text-primary"></i> <span class="badge">0</span>
 			</a>
 		</div>
+
 	</div>
 </div>
 <!-- Topbar End -->
@@ -70,8 +75,8 @@
 					<a th:href="@{/shop(value=1)}" class="nav-item nav-link">Clothing</a>
 					<a th:href="@{/shop(value=2)}" class="nav-item nav-link">Shoes</a>
 					<a th:href="@{/shop(value=3)}" class="nav-item nav-link">Accessories</a>
-					<a th:href="@{/shop(value=4)}" class="nav-item nav-link">Bags</a>
-					<a th:href="@{/shop(value=5)}" class="nav-item nav-link">Jewelry</a>
+					<a th:href="@{/shop(value=4)}" class="nav-item nav-link">Bags</a> <a
+						th:href="@{/shop(value=5)}" class="nav-item nav-link">Jewelry</a>
 				</div>
 			</nav>
 		</div>
