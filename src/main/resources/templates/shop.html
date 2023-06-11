@@ -199,14 +199,12 @@
 					<div class="col-12 pb-1">
 						<div
 							class="d-flex align-items-center justify-content-between mb-4">
-							<form action="/shop/seach2">
-								<div class="input-group">
-									<input type="text" class="form-control"
-										placeholder="Search by name" name="keywords"
-										th:value="${keywords}">
-									<button type="submit">Search</button>
-								</div>
-							</form>
+
+							<div th:if="${not #strings.isEmpty(message)}"
+								class="alert alert-info" role="alert">
+								<p th:text="${message}"></p>
+							</div>
+
 							<div class="dropdown ml-4">
 								<button class="btn border dropdown-toggle" type="button"
 									id="triggerId" data-toggle="dropdown" aria-haspopup="true"
@@ -242,17 +240,35 @@
 							<div
 								class="card-footer d-flex justify-content-between bg-light border">
 								<a th:href="@{/shop/{id}(id=${item.productId})}"
-									class="btn btn-sm text-dark p-0"><i
-									class="fas fa-eye text-primary mr-1"></i>View Detail</a> <a
-									th:href="@{/cart/{productId}(productId=${item.productId})}"
-									class="btn btn-sm text-dark p-0"><i
-									class="fas fa-shopping-cart text-primary mr-1"></i>Add
-									To Cart</a>
+									class="btn btn-sm text-dark p-0"> <i
+									class="fas fa-eye text-primary mr-1"></i>View Detail
+								</a> <a th:href="@{/cart/{productId}(productId=${item.productId})}"
+									class="btn btn-sm text-dark p-0"
+									th:if="${session.userSession != null}"> <i
+									class="fas fa-shopping-cart text-primary mr-1"></i>Add To Cart
+								</a> <a href="/login" class="btn btn-sm text-dark p-0"
+									th:unless="${session.userSession != null}"> <i
+									class="fas fa-shopping-cart text-primary mr-1"></i>Add To Cart
+								</a>
 							</div>
 						</div>
 					</div>
 
-
+					<div class="col-12 pb-1">
+						<nav aria-label="Page navigation">
+							<div class="pagination justify-content-center mb-3">
+								<a class="btn btn-primary mx-2" th:href="@{/shop/page1?p=0}">First</a>
+								<a class="btn btn-primary mx-2"
+									th:href="@{/shop/page1(p=${products2.number-1})}"
+									th:if="${products.number > 0}">Previous</a> <a
+									class="btn btn-primary mx-2"
+									th:href="@{/shop/page1(p=${products.number+1})}"
+									th:if="${products.number < products.totalPages-1}">Next</a> <a
+									class="btn btn-primary mx-2"
+									th:href="@{/shop/page1(p=${products.totalPages-1})}">Last</a>
+							</div>
+						</nav>
+					</div>
 				</div>
 			</div>
 			<!-- Shop Product End -->

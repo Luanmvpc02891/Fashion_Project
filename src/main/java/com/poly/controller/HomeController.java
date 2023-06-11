@@ -55,17 +55,8 @@ public class HomeController {
 	SessionService session;
 
 	@GetMapping("/index")
-	public String index(Model model, @RequestParam("p") Optional<Integer> p) {
-		Pageable pageable = PageRequest.of(p.orElse(0), 5);
-		Page<Product> page = dao1.findAll(pageable);
-		model.addAttribute("products", page);
-		return "index";
-	}
-
-	@GetMapping("/index/page")
-	public String index2(Model model, @RequestParam("p") Optional<Integer> p) {
-		Pageable pageable = PageRequest.of(p.orElse(0), 5);
-		Page<Product> page = dao1.findAll(pageable);
+	public String index3(Model model, Product p) {
+		List<Product> page = dao1.findAll();
 		model.addAttribute("products", page);
 		return "index";
 	}
@@ -91,10 +82,11 @@ public class HomeController {
 		if (user != null && user.getPassword().equals(password)) {
 			if (user.isRole()) {
 				session.set("userSession", user);
-				return "redirect:/admin";
+				return "redirect:/usermanagement";
 			} else {
 				// Kiểm tra xem người dùng đã có giỏ hàng trước đó hay chưa
 				Cart cart = null;
+				session.set("userSession", user);
 				if (user.getCarts().isEmpty()) {
 					// Nếu chưa có giỏ hàng, tạo giỏ hàng mới
 					cart = new Cart();
@@ -106,8 +98,7 @@ public class HomeController {
 					// Nếu đã có giỏ hàng, sử dụng lại giỏ hàng đó
 					cart = user.getCarts().get(0);
 				}
-				session.set("userSession", user);
-				System.out.println(user.getUsername());
+
 				// Lưu cartId vào session
 				request.getSession().setAttribute("cartId", cart.getCartId());
 				request.getSession().setAttribute("user", user.getUsername());

@@ -53,13 +53,13 @@ public class ProductController {
 	@Autowired
 	SessionService session;
 
-//	@GetMapping("/shop")
-//	public String shop(Model model) {
-//		List<Product> product1 = dao.findAll();
-//		model.addAttribute("products", product1);
-//		// model.addAttribute("products", dao.findAll());
-//		return "shop";
-//	}
+	// @GetMapping("/shop")
+	// public String shop(Model model) {
+	// List<Product> product1 = dao.findAll();
+	// model.addAttribute("products", product1);
+	// // model.addAttribute("products", dao.findAll());
+	// return "shop";
+	// }
 
 	@GetMapping("/shop")
 	public String shop(Model model, @RequestParam("value") int value) {
@@ -73,21 +73,26 @@ public class ProductController {
 	public String caterogy(Model model, @RequestParam("p") Optional<Integer> p) {
 		List<Product> product1 = dao.findAll();
 		model.addAttribute("products", product1);
-//	  model.addAttribute("products", dao.findAll())
+		// model.addAttribute("products", dao.findAll())
 
 		return "shop";
 	}
 
 	@RequestMapping("/shop/seach2")
-	public String searchAndPage(Model model, @RequestParam("p") Optional<Integer> p,
-			@RequestParam("keywords") String kw, Product product) {
-		if (kw.equals(null) || !kw.equals(product.getProductName())) {
-			List<Product> product1 = dao.findAll();
-			model.addAttribute("products", product1);
+	public String searchAndPage(Model model, @RequestParam("keywords") String kw) {
+		List<Product> products;
 
+		if (kw.isEmpty()) {
+			products = dao.findAll();
 		} else {
-			List<Product> product1 = dao.findAllByNameLike("%" + kw + "%");
+			products = dao.findAllByNameLike("%" + kw + "%");
+		}
+		if (products.isEmpty()) {
+			List<Product> product1 = dao.findAll();
+			model.addAttribute("message", "Không có sản phẩm phù hợp.");
 			model.addAttribute("products", product1);
+		} else {
+			model.addAttribute("products", products);
 		}
 		return "shop";
 	}
@@ -96,6 +101,7 @@ public class ProductController {
 	public String paginate(Model model, @RequestParam("p") Optional<Integer> p) {
 		Pageable pageable = PageRequest.of(p.orElse(0), 5);
 		Page<Product> page = dao.findAll(pageable);
+		System.out.println(page.getNumber());
 		model.addAttribute("products", page);
 		return "shop";
 	}
@@ -157,7 +163,7 @@ public class ProductController {
 				// 'Product'
 				product.setImage(filePath);
 				model.addAttribute("hasMessage", false);
-			}else {
+			} else {
 				model.addAttribute("hasMessage", true);
 				System.out.println(bindingResult.toString());
 				List<Product> product1 = dao.findAll();
@@ -168,10 +174,10 @@ public class ProductController {
 				model.addAttribute("producers", producer);
 				return "admin";
 			}
-//			if (product.getCategory()==null) {
-//				bindingResult.rejectValue("category.categoryId", "NotNull.product.category");
-//			}
-			
+			// if (product.getCategory()==null) {
+			// bindingResult.rejectValue("category.categoryId", "NotNull.product.category");
+			// }
+
 			if (bindingResult.getErrorCount() > 1) {
 				System.out.println(bindingResult.toString());
 				List<Product> product1 = dao.findAll();
@@ -328,13 +334,13 @@ public class ProductController {
 		return "admin";
 	}
 
-//	@PostMapping("/admin/delete")
-//	public String delete(@RequestParam("productId") int productId,Model model) {
-//		dao.deleteById(productId);
-//		model.addAttribute("message", "Delete Success!");
-//		// Xử lý sau khi xóa sản phẩm
-//		return "redirect:/admin";
-//	}
+	// @PostMapping("/admin/delete")
+	// public String delete(@RequestParam("productId") int productId,Model model) {
+	// dao.deleteById(productId);
+	// model.addAttribute("message", "Delete Success!");
+	// // Xử lý sau khi xóa sản phẩm
+	// return "redirect:/admin";
+	// }
 
 	@PostMapping("/admin/reset")
 	public String reset(Model model) {
