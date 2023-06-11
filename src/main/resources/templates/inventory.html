@@ -23,6 +23,17 @@
 
 		<section layout:fragment="content">
 			<div class="col mt-4">
+			<div th:if="${not #strings.isEmpty(message)}" class="row">
+					<div class="col">
+						<div class="alert alert-success" th:text="${message}"></div>
+					</div>
+				</div>
+
+				<div th:if="${not #strings.isEmpty(error)}" class="row">
+					<div class="col">
+						<div class="alert alert-danger" th:text="${error}"></div>
+					</div>
+				</div>
 				<ul class="nav nav-tabs" id="myTab" role="tablist">
 					<li class="nav-item" role="presentation">
 						<button class="nav-link active" id="userEditing-tab"

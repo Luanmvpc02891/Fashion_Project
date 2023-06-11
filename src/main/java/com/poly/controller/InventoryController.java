@@ -75,6 +75,7 @@ public class InventoryController {
 			model.addAttribute("inventorys", RepoInventory.findAll());
 			List<Product> products = RepoProduct.findAll();
 			model.addAttribute("products", products);
+			model.addAttribute("message", "Create success ");
 			return "inventory";
 		}
 
@@ -112,6 +113,7 @@ public class InventoryController {
 			Model model, @RequestParam("product") int productId) {
 		if (bindingResult.hasErrors()) {
 			// Xử lý khi dữ liệu không hợp lệ
+			model.addAttribute("message", "Update success ");
 			// return "update-inventory";
 		}
 		try {
@@ -132,15 +134,16 @@ public class InventoryController {
 				existingInventory.setActive(true);
 				RepoInventory.save(existingInventory);
 
-				model.addAttribute("message", "Cập nhật thành công");
+				
 			} else {
 				model.addAttribute("error", "Kho không tồn tại");
 				return "inventory";
 			}
-
+			model.addAttribute("message", "Update success ");
 			// Load lại danh sách kho và các thông tin khác để hiển thị trên giao diện
 			List<Inventory> inventorys = RepoInventory.findAll();
 			List<Product> products = RepoProduct.findAll();
+			
 			model.addAttribute("inventorys", inventorys);
 			model.addAttribute("products", products);
 			model.addAttribute("inventory", new Inventory()); // Đặt lại đối tượng inventory rỗng
@@ -176,7 +179,7 @@ public class InventoryController {
 				existingInventory.setActive(false);
 				RepoInventory.save(existingInventory);
 
-				model.addAttribute("message", "Xoá thành công");
+				model.addAttribute("message", "Delete success ");
 			} else {
 				model.addAttribute("error", "Kho không tồn tại");
 				return "inventory";
