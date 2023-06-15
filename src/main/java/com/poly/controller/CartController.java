@@ -153,6 +153,7 @@ public class CartController {
 
 			cartProductRepo.save(cartProduct);
 		}
+		
 		Integer cartId = (Integer) request.getSession().getAttribute("cartId");
 
 		if (cartId != null) {

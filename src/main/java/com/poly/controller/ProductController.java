@@ -60,24 +60,22 @@ public class ProductController {
 	// // model.addAttribute("products", dao.findAll());
 	// return "shop";
 	// }
-
+		//Sắp xếp theo loại
 	@GetMapping("/shop")
 	public String shop(Model model, @RequestParam("value") int value) {
 		List<Product> product1 = dao.getByCategory(value);
 		model.addAttribute("products", product1);
-
 		return "shop";
 	}
-
+      
 	@GetMapping("/shop/seach")
 	public String caterogy(Model model, @RequestParam("p") Optional<Integer> p) {
 		List<Product> product1 = dao.findAll();
 		model.addAttribute("products", product1);
 		// model.addAttribute("products", dao.findAll())
-
 		return "shop";
 	}
-
+	  //Tìm kiếm
 	@RequestMapping("/shop/seach2")
 	public String searchAndPage(Model model, @RequestParam("keywords") String kw) {
 		List<Product> products;

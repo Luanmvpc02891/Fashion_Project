@@ -41,11 +41,9 @@
 			</form>
 		</div>
 		<div class="col-lg-3 col-6 text-right">
-			<a href="" class="btn border"> <i
-				class="fas fa-heart text-primary"></i> <span class="badge">0</span>
-			</a> <a th:href="@{/cart}" class="btn border"
+			 <a th:href="@{/cart}" class="btn border"
 				th:if="${session.userSession != null}"> <i
-				class="fas fa-shopping-cart text-primary"></i> <span class="badge">0</span>
+				class="fas fa-shopping-cart text-primary"></i> <span class="badge">Cart</span>
 			</a> <a href="/login" class="btn border"
 				th:unless="${session.userSession != null}"> <i
 				class="fas fa-shopping-cart text-primary"></i> <span class="badge">0</span>
