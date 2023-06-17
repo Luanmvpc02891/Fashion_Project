@@ -106,14 +106,35 @@ public class ProductController {
 	}
 
 	@GetMapping("/admin")
-	public String admin(Model model, @ModelAttribute("product") Product product) {
-		List<Product> product1 = dao.findAll();
-		model.addAttribute("products", product1);
-		List<Category> category = dao1.findAll();
-		model.addAttribute("categorys", category);
-		List<Producer> producer = producerRepo.findAll();
-		model.addAttribute("producers", producer);
-		return "/admin/admin";
+	public String admin(Model model, @ModelAttribute("product") Product product,
+	        @RequestParam(value = "keywords", required = false) String keywords,
+	        @RequestParam(value = "page", required = false, defaultValue = "0") int page,
+	        @RequestParam(value = "size", required = false, defaultValue = "5") int size) {
+
+	    // Sử dụng phân trang
+	    Pageable pageable = PageRequest.of(page, size);
+
+	    // Tìm kiếm sản phẩm với từ khóa (nếu có)
+	    Page<Product> productPage;
+	    if (keywords != null && !keywords.isEmpty()) {
+	        productPage = dao.findAllByNameLike("%" + keywords + "%", pageable);
+	    } else {
+	        productPage = dao.findAll(pageable);
+	    }
+	    List<Product> product1 = productPage.getContent();
+
+	    // Thêm danh sách sản phẩm và các thông tin khác vào model
+	    model.addAttribute("products", product1);
+	    model.addAttribute("categorys", dao1.findAll());
+	    model.addAttribute("producers", producerRepo.findAll());
+
+	    // Thêm các thông tin phân trang vào model
+	    model.addAttribute("currentPage", page);
+	    model.addAttribute("totalPages", productPage.getTotalPages());
+	    model.addAttribute("size", size);
+	    model.addAttribute("keywords", keywords);
+
+	    return "/admin/admin";
 	}
 
 	@GetMapping("/admin/edit/")

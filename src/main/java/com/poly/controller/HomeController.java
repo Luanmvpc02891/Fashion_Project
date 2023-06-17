@@ -80,33 +80,37 @@ public class HomeController {
 		user = dao.findByUsername(username);
 
 		if (user != null && user.getPassword().equals(password)) {
-			if (user.isRole()) {
-				session.set("userSession", user);
-				return "redirect:/usermanagement";
+			if (user.isIsative()== false) {
+				model.addAttribute("messages", "Tài khoản của bạn đã bị vô hiệu hóa.");
+				return "login";
 			} else {
-				// Kiểm tra xem người dùng đã có giỏ hàng trước đó hay chưa
-				Cart cart = null;
-				session.set("userSession", user);
-				if (user.getCarts().isEmpty()) {
-					// Nếu chưa có giỏ hàng, tạo giỏ hàng mới
-					cart = new Cart();
-					cart.setUser(user);
-					cart.setCartDate(new Date());
-					// Lưu đối tượng Cart vào cơ sở dữ liệu bằng JpaRepository
-					cartRepository.save(cart);
+				if (user.isRole()) {
+					session.set("userSession", user);
+					return "redirect:/usermanagement";
 				} else {
-					// Nếu đã có giỏ hàng, sử dụng lại giỏ hàng đó
-					cart = user.getCarts().get(0);
+					// Kiểm tra xem người dùng đã có giỏ hàng trước đó hay chưa
+					Cart cart = null;
+					session.set("userSession", user);
+					if (user.getCarts().isEmpty()) {
+						// Nếu chưa có giỏ hàng, tạo giỏ hàng mới
+						cart = new Cart();
+						cart.setUser(user);
+						cart.setCartDate(new Date());
+						// Lưu đối tượng Cart vào cơ sở dữ liệu bằng JpaRepository
+						cartRepository.save(cart);
+					} else {
+						// Nếu đã có giỏ hàng, sử dụng lại giỏ hàng đó
+						cart = user.getCarts().get(0);
+					}
+
+					// Lưu cartId vào session
+					request.getSession().setAttribute("cartId", cart.getCartId());
+					request.getSession().setAttribute("user", user.getUsername());
+
+					return "redirect:/index";
 				}
-
-				// Lưu cartId vào session
-				request.getSession().setAttribute("cartId", cart.getCartId());
-				request.getSession().setAttribute("user", user.getUsername());
-
-				return "redirect:/index";
 			}
 		}
-
 		model.addAttribute("messages", "Đăng nhập thất bại");
 		if (result.hasErrors()) {
 			return "login";
