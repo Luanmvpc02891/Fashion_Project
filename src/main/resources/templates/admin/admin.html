@@ -18,202 +18,181 @@
 </head>
 
 <body>
+	<div th:include="/admin/layout/nav.html"></div>
+	<div class="col-4 ml-auto" >
+			<form action="/shop">
+				<div class="input-group">
+					<input type="text" class="form-control"
+						placeholder="Search by name" name="keywords"
+						th:value="${keywords}">
+					<input type="submit" value="Search">
+				</div>
+			</form>
+		</div>
 	<main class="container-fluid">
-		<nav class="row">
-			<nav class="navbar navbar-expand-sm navbar-light  bg-light col">
-				<a class="navbar-brand" href="#">Administration</a>
-				<button class="navbar-toggler d-lg-none" type="button"
-					data-toggle="collapse" data-target="#collapsibleNavId"
-					aria-controls="collapsibleNavId" aria-expanded="false"
-					aria-label="Toggle navigation">
-					<span class="navbar-toggler-icon"></span>
-				</button>
-				<div class="collapse navbar-collapse text-center"
-					id="collapsibleNavId">
-					<ul class="navbar-nav text-center mr-auto mt-2 mt-lg-0">
-						<li class="nav-item active"><a class="nav-link"
-							th:href="@{/admin}">Product<span class="sr-only">(current)</span></a></li>
-						<li class="nav-item"><a class="nav-link"
-							th:href="@{/usermanagement}">User</a></li>
-						<li class="nav-item"><a class="nav-link"
-							th:href="@{/inventory}">Inventory</a></li>
-						<li class="nav-item"><a class="nav-link"
-							th:href="@{/Revenue}">Revenue</a></li>
-						<li class="nav-item"><a class="nav-link"
-							th:href="@{/statistics}">Statistics</a></li>
-						<li class="nav-item"><a class="nav-link" th:href="@{/order}">Order</a></li>
-					</ul>
+		<div class="col mt-4">
+			<div th:if="${not #strings.isEmpty(message)}" class="row">
+				<div class="col">
+					<div class="alert alert-success" th:text="${message}"></div>
 				</div>
-			</nav>
-		</nav>
+			</div>
 
-		<div layout:fragment="content">
-			<div class="col mt-4">
-				<div th:if="${not #strings.isEmpty(message)}" class="row">
-					<div class="col">
-						<div class="alert alert-success" th:text="${message}"></div>
-					</div>
+			<div th:if="${not #strings.isEmpty(error)}" class="row">
+				<div class="col">
+					<div class="alert alert-danger" th:text="${error}"></div>
 				</div>
+			</div>
 
-				<div th:if="${not #strings.isEmpty(error)}" class="row">
-					<div class="col">
-						<div class="alert alert-danger" th:text="${error}"></div>
-					</div>
-				</div>
+			<ul class="nav nav-tabs" id="myTab" role="tablist">
+				<li class="nav-item" role="presentation">
+					<button class="nav-link active" id="userEditing-tab"
+						data-toggle="tab" data-target="#userEditing" type="button"
+						role="tab" aria-controls="userEditing" aria-selected="true">Product
+						Editing</button>
+				</li>
+				<li class="nav-item" role="presentation">
+					<button class="nav-link" id="userList-tab" data-toggle="tab"
+						data-target="#userList" type="button" role="tab"
+						aria-controls="userList" aria-selected="false">Product
+						List</button>
+				</li>
+			</ul>
+			<div class="tab-content" id="myTabContent">
+				<div class="tab-pane fade show active" id="userEditing"
+					role="tabpanel" aria-labelledby="userEditing-tab">
+					<form th:action="@{/admin}" th:object="${product}" method="post"
+						enctype="multipart/form-data">
+						<div class="card">
+							<div class="card-body">
+								<div class="row col">
+									<div class="form-group col-4">
+										<label for="product_id">ID</label> <input type="text"
+											class="form-control" th:field="*{productId}" id="product_id"
+											aria-describedby="product_id" placeholder="ID sản phẩm"
+											readonly>
+									</div>
+									<div class="form-group  col-4">
+										<label for="product_name">Tên sản phẩm</label> <input
+											type="text" class="form-control" th:field="*{productName}"
+											id="product_name" aria-describedby="fullnameId"
+											placeholder="Tên sản phẩm"> <small id="productName"
+											class="form-text "
+											th:if="${#fields.hasErrors('productName')}"
+											th:errors="*{productName}" style="color: red;"></small>
+									</div>
+									<div class="form-group col-4">
+										<label for="category_id">Loại</label> <select
+											class="form-control" id="category_id" name="category_id"
+											th:selected="*{category}">
+											<option value="0">-- Chọn loại hàng --</option>
+											<option th:each="category : ${categorys}"
+												th:value="${category.categoryId}"
+												th:text="${category.categoryName}"
+												th:selected="${category.categoryId} == ${product?.category?.categoryId}"></option>
+										</select>
 
-				<ul class="nav nav-tabs" id="myTab" role="tablist">
-					<li class="nav-item" role="presentation">
-						<button class="nav-link active" id="userEditing-tab"
-							data-toggle="tab" data-target="#userEditing" type="button"
-							role="tab" aria-controls="userEditing" aria-selected="true">Product
-							Editing</button>
-					</li>
-					<li class="nav-item" role="presentation">
-						<button class="nav-link" id="userList-tab" data-toggle="tab"
-							data-target="#userList" type="button" role="tab"
-							aria-controls="userList" aria-selected="false">Product
-							List</button>
-					</li>
-				</ul>
-				<div class="tab-content" id="myTabContent">
-					<div class="tab-pane fade show active" id="userEditing"
-						role="tabpanel" aria-labelledby="userEditing-tab">
-						<form th:action="@{/admin}" th:object="${product}" method="post"
-							enctype="multipart/form-data">
-							<div class="card">
-								<div class="card-body">
-									<div class="row col">
-										<div class="form-group col-4">
-											<label for="product_id">ID</label> <input type="text"
-												class="form-control" th:field="*{productId}" id="product_id"
-												aria-describedby="product_id" placeholder="ID sản phẩm"
-												readonly>
-										</div>
-										<div class="form-group  col-4">
-											<label for="product_name">Tên sản phẩm</label> <input
-												type="text" class="form-control" th:field="*{productName}"
-												id="product_name" aria-describedby="fullnameId"
-												placeholder="Tên sản phẩm" > 
-												 <small id="productName" class="form-text "
-												th:if="${#fields.hasErrors('productName')}"
-												th:errors="*{productName}" style="color: red;"></small>
-										</div>
-										<div class="form-group col-4">
-											<label for="category_id">Loại</label> <select
-												class="form-control" id="category_id" name="category_id"
-												th:selected="*{category}">
-												<option value="0">-- Chọn loại hàng --</option>
-												<option th:each="category : ${categorys}"
-													th:value="${category.categoryId}"
-													th:text="${category.categoryName}"
-													th:selected="${category.categoryId} == ${product?.category?.categoryId}"></option>
-											</select>
-											
-										</div>
-										<div class="form-group  col-4">
-											<label for="price">Giá</label> <input type="number"
-												class="form-control" th:field="*{price}" id="price"
-												aria-describedby="price" placeholder="Giá sản phẩm">
-												<small id="price" class="form-text "
-												th:if="${#fields.hasErrors('price')}"
-												th:errors="*{price}" style="color: red;"></small> 
+									</div>
+									<div class="form-group  col-4">
+										<label for="price">Giá</label> <input type="number"
+											class="form-control" th:field="*{price}" id="price"
+											aria-describedby="price" placeholder="Giá sản phẩm">
+										<small id="price" class="form-text "
+											th:if="${#fields.hasErrors('price')}" th:errors="*{price}"
+											style="color: red;"></small>
 
-										</div>
-										<div class="form-group  col-4">
-											<label for="quantity">Số lượng</label> <input type="number"
-												class="form-control" th:field="*{quantity}" id="quantity"
-												aria-describedby="quantity" placeholder="Số lượng">
-										 <small id="quantity" class="form-text "
-												th:if="${#fields.hasErrors('quantity')}"
-												th:errors="*{quantity}" style="color: red;"></small> 
+									</div>
+									<div class="form-group  col-4">
+										<label for="quantity">Số lượng</label> <input type="number"
+											class="form-control" th:field="*{quantity}" id="quantity"
+											aria-describedby="quantity" placeholder="Số lượng"> <small
+											id="quantity" class="form-text "
+											th:if="${#fields.hasErrors('quantity')}"
+											th:errors="*{quantity}" style="color: red;"></small>
 
-										</div>
-										<div class="form-group  col-4">
-											<label for="discount">Giảm giá</label> <input type="text"
-												class="form-control" th:field="*{discount}" id="discount"
-												aria-describedby="discount" placeholder="Giảm giá">
-												<small id="discount" class="form-text "
-												th:if="${#fields.hasErrors('discount')}"
-												th:errors="*{discount}" style="color: red;"></small> 
-										</div>
-										<div class="form-group col-4">
-											<label for="producer_id"> NSX</label> <select
-												class="form-control" id="producer_id" name="producer_id"
-												th:selected="*{producer}">
-												<option value="">-- Chọn NSX --</option>
-												<option th:each="producer : ${producers}"
-													th:value="${producer.producerId}"
-													th:text="${producer.producerName}"
-													th:selected="${producer.producerId} == ${product?.producer?.producerId}"></option>
-											</select>
-										</div>
-										<div class="form-group col-4">
-											<label for="image">Hình ảnh</label> <img id="image-preview"
-												class="img-thumbnail" th:src="${product.image}"
-												alt="Preview Image"> <input type="file"
-												class="form-control img-fluid" id="image"
-												th:field="*{image}" name="image">
-												<div  class="form-text "style="color: red;" th:if= "${hasMessage}" >chưa chọn ảnh</div>
-												<div th:unless= "${hasMessage}"></div>
-										</div>
-
-										<input type="hidden" id="selectedCategory"
-											name="selectedCategory" th:value="${selectedCategory}" /> <input
-											type="hidden" id="selectedManufacturer"
-											name="selectedManufacturer"
-											th:value="${selectedManufacturer}" />
+									</div>
+									<div class="form-group  col-4">
+										<label for="discount">Giảm giá</label> <input type="text"
+											class="form-control" th:field="*{discount}" id="discount"
+											aria-describedby="discount" placeholder="Giảm giá"> <small
+											id="discount" class="form-text "
+											th:if="${#fields.hasErrors('discount')}"
+											th:errors="*{discount}" style="color: red;"></small>
+									</div>
+									<div class="form-group col-4">
+										<label for="producer_id"> NSX</label> <select
+											class="form-control" id="producer_id" name="producer_id"
+											th:selected="*{producer}">
+											<option value="">-- Chọn NSX --</option>
+											<option th:each="producer : ${producers}"
+												th:value="${producer.producerId}"
+												th:text="${producer.producerName}"
+												th:selected="${producer.producerId} == ${product?.producer?.producerId}"></option>
+										</select>
+									</div>
+									<div class="form-group col-4">
+										<label for="image">Hình ảnh</label> <img id="image-preview"
+											class="img-thumbnail" th:src="${product.image}"
+											alt="Preview Image"> <input type="file"
+											class="form-control img-fluid" id="image" th:field="*{image}"
+											name="image">
+										<div class="form-text " style="color: red;"
+											th:if="${hasMessage}">chưa chọn ảnh</div>
+										<div th:unless="${hasMessage}"></div>
 									</div>
 
+									<input type="hidden" id="selectedCategory"
+										name="selectedCategory" th:value="${selectedCategory}" /> <input
+										type="hidden" id="selectedManufacturer"
+										name="selectedManufacturer" th:value="${selectedManufacturer}" />
 								</div>
-								<div class="card-footer text-muted">
-									<button formaction="/admin/create" class="btn btn-primary">Create</button>
-									<button formaction="/admin/update" class="btn btn-warning"
-										onclick="return confirmUpdate()">Update</button>
-									<button formaction="/admin/delete" class="btn btn-danger"
-										onclick="return confirmDelete()">Delete</button>
-									<button formaction="/admin/reset" class="btn btn-info">Reset</button>
-								</div>
+
 							</div>
-						</form>
-					</div>
+							<div class="card-footer text-muted">
+								<button formaction="/admin/create" class="btn btn-primary">Create</button>
+								<button formaction="/admin/update" class="btn btn-warning"
+									onclick="return confirmUpdate()">Update</button>
+								<button formaction="/admin/delete" class="btn btn-danger"
+									onclick="return confirmDelete()">Delete</button>
+								<button formaction="/admin/reset" class="btn btn-info">Reset</button>
+							</div>
+						</div>
+					</form>
+				</div>
 
 
-					<div class="tab-pane fade" id="userList" role="tabpanel"
-						aria-labelledby="userList-tab">
-						<table class="table table-stripe">
-							<tr>
-								<td>ID</td>
-								<td>Tên sản phẩm</td>
-								<td>Giá</td>
-								<td>Số lượng</td>
-								<td>Giảm giá</td>
-								<td>Tên ảnh</td>
-								<td>Hình Ảnh</td>
-								<td>Loại</td>
-								<td>ID Nhà sản xuất</td>
-								<td>&nbsp;</td>
-							</tr>
-							<tr th:each="item : ${products}"
-								th:unless="${item.active == false}">
-								<td th:text="${item.productId}"></td>
-								<td th:text="${item.productName}"></td>
-								<td th:text="${item.price}"></td>
-								<td th:text="${item.quantity}"></td>
-								<td th:text="${item.discount}"></td>
-								<td th:text="${item.image}"></td>
-								<td><img width="10%"
-									th:src="@{'/uploads/' + ${item.image.substring(11)}}"
-									alt="Product Image"></td>
-								<td th:text="${item?.category?.categoryName}"></td>
-								<td th:text="${item?.producer?.producerName}"></td>
-								<td><a
-									th:href="@{/admin/edit/(productId=${item.productId})}">Edit</a>
-								</td>
-								<!-- Các cột khác -->
-							</tr>
-						</table>
+				<div class="tab-pane fade" id="userList" role="tabpanel"
+					aria-labelledby="userList-tab">
+					<table class="table table-stripe">
+						<tr>
+							<td>ID</td>
+							<td>Tên sản phẩm</td>
+							<td>Giá</td>
+							<td>Số lượng</td>
+							<td>Giảm giá</td>		
+							<td>Hình Ảnh</td>
+							<td>Loại</td>
+							<td>ID Nhà sản xuất</td>
+							<td>&nbsp;</td>
+						</tr>
+						<tr th:each="item : ${products}"
+							th:unless="${item.active == false}">
+							<td th:text="${item.productId}"></td>
+							<td th:text="${item.productName}"></td>
+							<td th:text="${item.price}"></td>
+							<td th:text="${item.quantity}"></td>
+							<td th:text="${item.discount}"></td>
+							<td><img width="10%"
+								th:src="@{'/uploads/' + ${item.image.substring(11)}}"
+								alt="Product Image"></td>
+							<td th:text="${item?.category?.categoryName}"></td>
+							<td th:text="${item?.producer?.producerName}"></td>
+							<td><a
+								th:href="@{/admin/edit/(productId=${item.productId})}">Edit</a>
+							</td>
+							<!-- Các cột khác -->
+						</tr>
+					</table>
 
-					</div>
 				</div>
 			</div>
 		</div>
@@ -255,8 +234,6 @@
 			return confirm("Bạn có chắc chắn muốn xóa sản phẩm?");
 		}
 	</script>
-	<!-- <script src="js/quantity.js"></script> -->
-	<script src="js/quantity.js"></script>
 </body>
 
 </html>

@@ -54,16 +54,19 @@ public class CartController {
 	}
 
 	private Double calculateTotalPrice(List<CartProduct> cartProducts) {
-		Double totalPrice = 0.0;
+	    Double totalPrice = 0.0;
 
-		for (CartProduct cartProduct : cartProducts) {
-			Double productPrice = cartProduct.getProduct().getPrice().doubleValue();
-			int quantity = cartProduct.getQuantity();
-			totalPrice += productPrice * quantity;
-		}
+	    for (CartProduct cartProduct : cartProducts) {
+	        Double productPrice = cartProduct.getProduct().getPrice().doubleValue();
+	        Double discount = cartProduct.getProduct().getDiscount().doubleValue();
+	        int quantity = cartProduct.getQuantity();
+	        Double discountedPrice = productPrice - (productPrice * discount);
+	        totalPrice += discountedPrice * quantity;
+	    }
 
-		return totalPrice;
+	    return totalPrice;
 	}
+
 
 	@GetMapping("/cart/{productId}")
 	public String addToCart(Model model, @PathVariable("productId") Integer productId) {

@@ -11,7 +11,28 @@
 
 <!-- Favicon -->
 <link th:href="@{/../img/favicon.ico}" rel="icon">
+<style>
+        .overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 9999;
+}
 
+.overlay-content {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: white;
+    padding: 20px;
+    text-align: center;
+}
+    </style>
 <!-- Google Web Fonts -->
 <link rel="preconnect" href="https://fonts.gstatic.com">
 <link
@@ -137,7 +158,9 @@
 							<h5 class="font-weight-bold">Total</h5>
 							<h5 class="font-weight-bold total-price" th:text="${totalPrice}"></h5>
 						</div>
-						<a class="btn btn-block btn-primary my-3 py-3" th:href="@{/checkout/add}" >Proceed To Checkout</a>
+						<a class="btn btn-block btn-primary my-3 py-3"
+							th:href="@{/checkout/add}" id="buyButton">Proceed To
+							Checkout</a>
 					</div>
 				</div>
 			</div>
@@ -149,6 +172,14 @@
 	<!-- Footer Start -->
 	<div th:include="/layout/footer.html"></div>
 	<!-- Footer End -->
+	<!-- Hộp thoại thông báo -->
+	<div id="overlay" class="overlay">
+        <div class="overlay-content">
+           <h2>Mua hàng thành công!</h2>
+			<p>Cảm ơn bạn đã mua hàng.</p>
+			<a class="btn btn-primary" onclick="hideSuccessOverlay()" th:href="@{/index}">Đóng</a>
+        </div>
+    </div>
 	<!-- Back to Top -->
 	<a href="#" class="btn btn-primary back-to-top"><i
 		class="fa fa-angle-double-up"></i></a>
@@ -163,7 +194,7 @@
 	<!-- Contact Javascript File -->
 	<script th:src="@{/mail/jqBootstrapValidation.min.js}"></script>
 	<script th:src="@{/mail/contact.js}"></script>
-
+	<script th:src="@{/js/box.js}"></script>
 	<!-- Template Javascript -->
 	<script th:src="@{/js/main.js}"></script>
 	<!-- <script th:src="@{/js/quantity.js}"></script> -->

@@ -56,7 +56,7 @@ public class HomeController {
 
 	@GetMapping("/index")
 	public String index3(Model model, Product p) {
-		List<Product> page = dao1.findAll();
+		List<Product> page = dao1.findFirst10ByOrderByDiscountDesc();
 		model.addAttribute("products", page);
 		return "index";
 	}

@@ -22,7 +22,7 @@ public class AdminController {
 	@GetMapping("/usermanagement")
 	public String usermanagement(Model model, @ModelAttribute("user") User user) {
 		model.addAttribute("users", RepoUser.findAll()); // Truyền danh sách dữ liệu vào model
-		return "usermanagement"; // Trả
+		return "/admin/usermanagement"; // Trả
 	}
 
 	@GetMapping("/usermanagement/edit/")
@@ -30,19 +30,19 @@ public class AdminController {
 		user = RepoUser.findById(userId).get();
 		model.addAttribute("user", user);
 		model.addAttribute("users", RepoUser.findAll()); // Truyền danh sách dữ liệu vào model
-		return "usermanagement"; // Trả
+		return "/admin/usermanagement"; // Trả
 	}
 
 	@PostMapping("/usermanagement/create")
 	public String usermanagement_create(@Valid @ModelAttribute("user") User user, BindingResult result, Model model) {
 		if (result.hasErrors()) {
-			return "usermanagement"; // Trả
+			return "/admin/usermanagement"; // Trả
 		} else {
 			user.setIsative(true);
 			RepoUser.save(user);
 			model.addAttribute("message", "Create success ");
 			model.addAttribute("users", RepoUser.findAll()); // Truyền danh sách dữ liệu vào model
-			return "usermanagement";
+			return "/admin/usermanagement";
 		}
 	}
 
@@ -52,7 +52,7 @@ public class AdminController {
 		RepoUser.save(user);
 		model.addAttribute("message", "Update success ");
 		model.addAttribute("users", RepoUser.findAll()); // Truyền danh sách dữ liệu vào model
-		return "usermanagement"; // Trả
+		return "/admin/usermanagement"; // Trả
 	}
 
 	@PostMapping("/usermanagement/delete")
@@ -68,7 +68,7 @@ public class AdminController {
 		// RepoUser.deleteById(userId);
 		usermanagement_reset(model);
 		model.addAttribute("users", RepoUser.findAll()); // Truyền danh sách dữ liệu vào model
-		return "usermanagement"; // Trả
+		return "/admin/usermanagement"; // Trả
 
 	}
 
@@ -77,6 +77,6 @@ public class AdminController {
 		User user = new User();
 		model.addAttribute("user", user);
 		model.addAttribute("users", RepoUser.findAll()); // Truyền danh sách dữ liệu vào model
-		return "usermanagement"; // Trả
+		return "/admin/usermanagement"; // Trả
 	}
 }

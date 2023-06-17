@@ -38,7 +38,7 @@ public class InventoryController {
 		model.addAttribute("inventorys", RepoInventory.findAll());
 		List<Product> product1 = RepoProduct.findAll();
 		model.addAttribute("products", product1);
-		return "inventory";
+		return "/admin/inventory";
 	}
 
 	@GetMapping("/inventory/edit/")
@@ -48,7 +48,7 @@ public class InventoryController {
 		List<Product> product1 = RepoProduct.findAll();
 		model.addAttribute("inventory", inventory);
 		model.addAttribute("products", product1);
-		return "inventory";
+		return "/admin/inventory";
 	}
 
 
@@ -62,7 +62,7 @@ public class InventoryController {
 		model.addAttribute("products", products);
 		model.addAttribute("productId", null); // Đặt lại giá trị productId thành null
 
-		return "inventory";
+		return "/admin/inventory";
 	}
 
 	@PostMapping("/inventory/create")
@@ -76,14 +76,14 @@ public class InventoryController {
 			List<Product> products = RepoProduct.findAll();
 			model.addAttribute("products", products);
 			model.addAttribute("message", "Create success ");
-			return "inventory";
+			return "/admin/inventory";
 		}
 
 		try {
 			Product product = RepoProduct.findById(productId).orElse(null);
 			if (product == null) {
 				model.addAttribute("error", "Product not found");
-				return "inventory";
+				return "/admin/inventory";
 			}
 			inventory.setActive(true);
 			inventory.setProduct(product);
@@ -105,7 +105,7 @@ public class InventoryController {
 
 		}
 
-		return "inventory";
+		return "/admin/inventory";
 	}
 
 	@PostMapping("/inventory/update")
@@ -126,7 +126,7 @@ public class InventoryController {
 				} else {
 					model.addAttribute("error", "Sản phẩm không tồn tại");
 
-					return "inventory";
+					return "/admin/inventory";
 				}
 				// Cập nhật các trường thông tin của kho
 				existingInventory.setQuantity(inventory.getQuantity());
@@ -137,7 +137,7 @@ public class InventoryController {
 				
 			} else {
 				model.addAttribute("error", "Kho không tồn tại");
-				return "inventory";
+				return "/admin/inventory";
 			}
 			model.addAttribute("message", "Update success ");
 			// Load lại danh sách kho và các thông tin khác để hiển thị trên giao diện
@@ -154,7 +154,7 @@ public class InventoryController {
 			model.addAttribute("error", e);
 		}
 
-		return "redirect:/inventory";
+		return "/admin/inventory";
 	}
 
 	
@@ -171,7 +171,7 @@ public class InventoryController {
 				} else {
 					model.addAttribute("error", "Sản phẩm không tồn tại");
 
-					return "inventory";
+					return "/admin/inventory";
 				}
 				// Cập nhật các trường thông tin của kho
 				existingInventory.setQuantity(inventory.getQuantity());
@@ -182,7 +182,7 @@ public class InventoryController {
 				model.addAttribute("message", "Delete success ");
 			} else {
 				model.addAttribute("error", "Kho không tồn tại");
-				return "inventory";
+				return "/admin/inventory";
 			}
 
 			// Load lại danh sách kho và các thông tin khác để hiển thị trên giao diện
@@ -198,6 +198,6 @@ public class InventoryController {
 			model.addAttribute("error", e);
 		}
 
-		return "redirect:/inventory";
+		return "redirect:/admin/inventory";
 	}
 }

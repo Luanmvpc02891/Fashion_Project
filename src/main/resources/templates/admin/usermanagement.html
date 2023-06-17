@@ -1,7 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org"
-      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="admin.html">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
 <title>Title</title>
 <!-- Required meta tags -->
@@ -18,11 +16,9 @@
 </head>
 
 <body>
+<div th:include="/admin/layout/nav.html"></div>
 	<main class="container-fluid">
-		
-		<div layout:fragment="content">
 			<div class="col mt-4">
-
 				<div th:if="${not #strings.isEmpty(message)}" class="row">
 					<div class="col">
 						<div class="alert alert-success" th:text="${message}"></div>
@@ -108,7 +104,7 @@
 										class="btn btn-primary">Create</button>
 									<button formaction="/usermanagement/update"
 										class="btn btn-warning">Update</button>
-									<button formaction="/usermanagement/delete"
+									<button th:if="${!user.role}" formaction="/usermanagement/delete" 
 										class="btn btn-danger">Delete</button>
 									<button formaction="/usermanagement/reset" class="btn btn-info">Reset</button>
 								</div>
@@ -145,7 +141,6 @@
 
 				</div>
 			</div>
-		</div>
 		<footer class="row"></footer>
 	</main>
 	<!-- Optional JavaScript -->

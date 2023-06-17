@@ -28,7 +28,7 @@ public class StatisticsController {
         model.addAttribute("categoryStats", categoryStats);
         model.addAttribute("producerStats", producerStats);
 
-        return "statistics";
+        return "/admin/statistics";
     }
     @Autowired
     private OrderRepository orderRepository;
@@ -37,7 +37,7 @@ public class StatisticsController {
     public String showStatisticsPage1(Model model) {
         BigDecimal totalRevenue = orderRepository.getTotalRevenue();
         model.addAttribute("totalRevenue", totalRevenue != null ? totalRevenue : BigDecimal.ZERO);
-        return "Revenue";
+        return "/admin/Revenue";
     }
 
     @GetMapping("/Revenue/revenue-by-month")
@@ -47,7 +47,7 @@ public class StatisticsController {
             Model model) {
         BigDecimal revenueByMonth = orderRepository.getRevenueByMonth(year, month);
         model.addAttribute("revenueByMonth", revenueByMonth != null ? revenueByMonth : BigDecimal.ZERO);
-        return "Revenue";
+        return "/admin/Revenue";
     }
 
     @GetMapping("/Revenue/revenue-by-year")
@@ -56,7 +56,7 @@ public class StatisticsController {
             Model model) {
         BigDecimal revenueByYear = orderRepository.getRevenueByYear(year);
         model.addAttribute("revenueByYear", revenueByYear != null ? revenueByYear : BigDecimal.ZERO);
-        return "Revenue";
+        return "/admin/Revenue";
     }
 
     @GetMapping("/Revenue/revenue-by-date-range")
@@ -66,7 +66,7 @@ public class StatisticsController {
             Model model) {
         BigDecimal revenueByDateRange = orderRepository.getRevenueByDateRange(startDate, endDate);
         model.addAttribute("revenueByDateRange", revenueByDateRange != null ? revenueByDateRange : BigDecimal.ZERO);
-        return "Revenue";
+        return "/admin/Revenue";
     }
 }
 

@@ -88,9 +88,9 @@
 						class="card-body border-left border-right text-center p-0 pt-4 pb-3">
 						<h6 class="text-truncate mb-3" th:text="${item.productName}"></h6>
 						<div class="d-flex justify-content-center">
-							<h6 th:text="${item.price}"></h6>
+							<h6 th:text="${item.price -(item.price *item.discount)}"></h6>
 							<h6 class="text-muted ml-2">
-								<del th:text="${item.discount}"></del>
+								<del th:text="${item.price}"></del>
 							</h6>
 						</div>
 					</div>

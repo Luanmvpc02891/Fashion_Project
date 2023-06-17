@@ -1,7 +1,5 @@
 <!doctype html>
-<html xmlns:th="http://www.thymeleaf.org"
-	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-	layout:decorate="admin.html">
+<html xmlns:th="http://www.thymeleaf.org">
 
 <head>
 <title>Title</title>
@@ -19,9 +17,8 @@
 </head>
 
 <body>
+<div th:include="/admin/layout/nav.html"></div>
 	<main class="container-fluid">
-
-		<section layout:fragment="content">
 			<div class="col mt-4">
 			<div th:if="${not #strings.isEmpty(message)}" class="row">
 					<div class="col">
@@ -126,7 +123,6 @@
 
 				</div>
 			</div>
-		</section>
 		<footer class="row"></footer>
 	</main>
 	<!-- Optional JavaScript -->

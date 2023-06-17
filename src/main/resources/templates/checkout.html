@@ -188,7 +188,7 @@
 										th:text="${item.product.productName}"></td>
 									<td></td>
 									<td class="align-middle"
-										th:text="${item.product.price + ' đ'}"></td>
+										th:text="${item.product.price -(item.product.price *item.product.discount)}"></td>
 								</tr>
 							</table>
 						</div>
@@ -259,6 +259,21 @@
           // Hiển thị thông báo mua hàng thành công
           alert('Mua hàng thành công!');
         });
+     // Hàm cập nhật tổng giá trị
+    	function updateTotalPrice() {
+    		// Tìm tất cả các phần tử có class "data-price" trong bảng
+    		var priceElements = $('.cart-table .data-price');
+
+    		// Tính toán tổng giá trị
+    		var totalPrice = 0.0;
+    		priceElements.each(function() {
+    			var price = parseFloat($(this).text().replace(/,/g, ''));
+    			totalPrice += price;
+    		});
+
+    		// Hiển thị tổng giá trị đã tính được
+    		$('.total-price').text(totalPrice.toFixed(2));
+    	}
         /*]]>*/
     </script>
 
