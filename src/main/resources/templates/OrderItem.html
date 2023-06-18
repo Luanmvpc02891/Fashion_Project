@@ -7,7 +7,37 @@
 <meta content="width=device-width, initial-scale=1.0" name="viewport">
 <meta content="Free HTML Templates" name="keywords">
 <meta content="Free HTML Templates" name="description">
+<style>
+.pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
 
+.pagination-buttons {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.pagination-buttons li {
+    display: inline-block;
+    margin-right: 5px;
+}
+
+.pagination-buttons li a {
+    display: inline-block;
+    padding: 5px 10px;
+    border: 1px solid #ccc;
+    text-decoration: none;
+    color: #000;
+}
+
+.pagination-buttons li.active a {
+    background-color: #ccc;
+}
+
+</style>
 <!-- Favicon -->
 <link th:href="@{/../img/favicon.ico}" rel="icon">
 
@@ -62,7 +92,8 @@
 						</tr>
 						<tr th:each="order : ${orders}">
 							<td th:text="${order.orderId}"></td>
-							<td th:text="${order.orderDate}"></td>
+							<td th:text="${#dates.format(order.orderDate, 'dd/MM/yyyy HH:mm:ss')}"></td>
+							
 							<td th:text="${order.totalAmount}"></td>
 							<td th:text="${order.user.username}"></td>
 							<td><a
@@ -94,6 +125,15 @@
 						</tbody>
 					</table>
 				</div>
+				<div class="pagination">
+								    <ul class="pagination-buttons">
+								        <li th:each="pageNum : ${#numbers.sequence(0, totalPages - 1)}"
+								            th:class="${pageNum == currentPage ? 'active' : ''}">
+								            <a th:href="@{/OrderItem(page=${pageNum}, size=${size}, keywords=${keywords})}"
+								                th:text="${pageNum + 1}"></a>
+								        </li>
+								    </ul>
+								</div>
 			</div>
 		</div>
 	</section>

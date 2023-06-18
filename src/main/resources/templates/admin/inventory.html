@@ -62,12 +62,12 @@
 										<div class="form-group col-4">
 											<label for="fullname">ID sản phẩm</label><select
 												class="form-control" id="product" name="product">
-												<option value="">-- Chọn ID hàng --</option>
+												<option value="0">-- Chọn ID hàng --</option>
 												<option th:each="product : ${products}"
 													th:text="${product.productId}"
 													th:selected="${product.productId}==${inventory?.product?.productId}"></option>
 											</select>
-
+												<small class="form-text text-danger" th:if="${#fields.hasErrors('product')}" th:errors="*{product}"></small>
 										</div>
  
 									</div>

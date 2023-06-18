@@ -95,9 +95,10 @@ label {
 
 	<div class="container">
 		<h1 class="m-0 display-5 font-weight-semi-bold">
-			<img src="img/logo.png" alt="">
+			<img src="/img/logo.png" alt="">
 		</h1>
-		<h1 th:text="${messages}" th:if="${messages}"></h1>
+		
+		<h1 th:if="${successMessage}" th:text="${successMessage}" ></h1>
 		<form th:action="@{/login}" th:object="${user}" method="post">
 
 

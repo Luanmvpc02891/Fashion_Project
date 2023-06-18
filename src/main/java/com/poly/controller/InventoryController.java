@@ -42,7 +42,7 @@ public class InventoryController {
 	}
 
 	@GetMapping("/inventory/edit/")
-	public String usermanagement_edit(Model model, @RequestParam("inventoryId") int inventoryId) {
+	public String inventory_edit(Model model, @RequestParam("inventoryId") int inventoryId) {
 		Inventory inventory = RepoInventory.findById(inventoryId).get();
 		model.addAttribute("inventorys", RepoInventory.findAll());
 		List<Product> product1 = RepoProduct.findAll();
@@ -68,6 +68,12 @@ public class InventoryController {
 	@PostMapping("/inventory/create")
 	public String createInventory(@ModelAttribute("inventory") @Valid Inventory inventory,
 			BindingResult bindingResult, @RequestParam("product") int productId, Model model) {
+		
+		 // Kiểm tra xem productId có được chọn hay không
+	    if (productId == 0) {
+	        bindingResult.rejectValue("product", "product.required", "Please select productId");
+	    }
+	    
 		if (bindingResult.hasErrors()) {
 			// Xử lý khi dữ liệu không hợp lệ, ví dụ: hiển thị thông báo lỗi và trả về trang
 			// "inventory"
@@ -75,7 +81,6 @@ public class InventoryController {
 			model.addAttribute("inventorys", RepoInventory.findAll());
 			List<Product> products = RepoProduct.findAll();
 			model.addAttribute("products", products);
-			model.addAttribute("message", "Create success ");
 			return "/admin/inventory";
 		}
 
@@ -111,10 +116,19 @@ public class InventoryController {
 	@PostMapping("/inventory/update")
 	public String updateInventory(@Valid @ModelAttribute("inventory") Inventory inventory, BindingResult bindingResult,
 			Model model, @RequestParam("product") int productId) {
+
+		 // Kiểm tra xem productId có được chọn hay không
+	    if (productId == 0) {
+	        bindingResult.rejectValue("product", "product.required", "Please select productId");
+	    }
 		if (bindingResult.hasErrors()) {
 			// Xử lý khi dữ liệu không hợp lệ
-			model.addAttribute("message", "Update success ");
-			// return "update-inventory";
+			List<Inventory> inventorys = RepoInventory.findAll();
+			List<Product> products = RepoProduct.findAll();
+			
+			model.addAttribute("inventorys", inventorys);
+			model.addAttribute("products", products);
+			 return "/admin/inventory";
 		}
 		try {
 			Inventory existingInventory = RepoInventory.findById(inventory.getInventoryId()).orElse(null);
@@ -198,6 +212,6 @@ public class InventoryController {
 			model.addAttribute("error", e);
 		}
 
-		return "redirect:/admin/inventory";
+		return "/admin/inventory";
 	}
 }

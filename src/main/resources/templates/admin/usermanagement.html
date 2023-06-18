@@ -6,7 +6,37 @@
 <meta charset="utf-8">
 <meta name="viewport"
 	content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<style>
+.pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
 
+.pagination-buttons {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.pagination-buttons li {
+    display: inline-block;
+    margin-right: 5px;
+}
+
+.pagination-buttons li a {
+    display: inline-block;
+    padding: 5px 10px;
+    border: 1px solid #ccc;
+    text-decoration: none;
+    color: #000;
+}
+
+.pagination-buttons li.active a {
+    background-color: #ccc;
+}
+
+</style>
 <!-- Bootstrap CSS -->
 <link rel="stylesheet"
 	href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
@@ -47,6 +77,42 @@
 				<div class="tab-content" id="myTabContent">
 					<div class="tab-pane fade show active" id="userEditing"
 						role="tabpanel" aria-labelledby="userEditing-tab">
+						<table class="table table-stripe">
+							<tr>
+								<td>User ID</td>
+								<td>Fullname</td>
+								<td>Email</td>
+								<td>Role</td>
+								<td>IsAtive</td>
+								<td>&nbsp;</td>
+							</tr>
+							<tr th:each="item : ${users}" th:unless="${item.isative == false}">
+								<td th:text="${item.userId}"></td>
+								<td th:text="${item.username}"></td>
+								<td th:text="${item.email}"></td>
+								<td th:text="${item.role}"></td>
+								
+								<td><a
+									th:href="@{/usermanagement/edit/(userId=${item.userId})}">Edit</a>
+								</td>
+
+								<!-- Các cột khác -->
+							</tr>
+						</table>
+						<div class="pagination">
+								    <ul class="pagination-buttons">
+								        <li th:each="pageNum : ${#numbers.sequence(0, totalPages - 1)}"
+								            th:class="${pageNum == currentPage ? 'active' : ''}">
+								            <a th:href="@{/usermanagement(page=${pageNum}, size=${size}, keywords=${keywords})}"
+								                th:text="${pageNum + 1}"></a>
+								        </li>
+								    </ul>
+								</div>
+					</div>
+
+
+					<div class="tab-pane fade" id="userList" role="tabpanel"
+						aria-labelledby="userList-tab">
 						<form th:action="@{/usermanagement}" th:object="${user}"
 							method="post">
 							<div class="card">
@@ -110,33 +176,8 @@
 								</div>
 							</div>
 						</form>
-					</div>
-
-
-					<div class="tab-pane fade" id="userList" role="tabpanel"
-						aria-labelledby="userList-tab">
-						<table class="table table-stripe">
-							<tr>
-								<td>User ID</td>
-								<td>Fullname</td>
-								<td>Email</td>
-								<td>Role</td>
-								<td>IsAtive</td>
-								<td>&nbsp;</td>
-							</tr>
-							<tr th:each="item : ${users}" th:unless="${item.isative == false}">
-								<td th:text="${item.userId}"></td>
-								<td th:text="${item.username}"></td>
-								<td th:text="${item.email}"></td>
-								<td th:text="${item.role}"></td>
+						
 								
-								<td><a
-									th:href="@{/usermanagement/edit/(userId=${item.userId})}">Edit</a>
-								</td>
-
-								<!-- Các cột khác -->
-							</tr>
-						</table>
 					</div>
 
 				</div>

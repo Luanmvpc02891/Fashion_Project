@@ -24,6 +24,15 @@
 	rel="stylesheet">
 <!-- Customized Bootstrap Stylesheet -->
 <link th:href="@{/css/style.css}" rel="stylesheet">
+<style>
+h2 {
+	text-align: center;
+	color: #d19c97;
+	font-weight: bold;
+	font-size: 24px;
+	margin-bottom: 20px;
+}
+</style>
 </head>
 
 <body>
@@ -31,7 +40,7 @@
 	<div th:include="/layout/nav.html"></div>
 	<!-- Navbar End -->
 
-	<p th:text="${message}"></p>
+	<h2 th:text="${message}"></h2>
 	<!-- Page Header Start -->
 	<div class="container-fluid bg-secondary mb-5">
 		<div

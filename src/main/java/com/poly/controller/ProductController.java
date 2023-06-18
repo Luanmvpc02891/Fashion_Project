@@ -88,7 +88,6 @@ public class ProductController {
 	            allProducts = dao.findAll();
 	        }
 	        model.addAttribute("message", "Không có sản phẩm phù hợp.");
-	        model.addAttribute("products", allProducts);
 	    } else {
 	        model.addAttribute("products", page);
 	    }
@@ -138,22 +137,43 @@ public class ProductController {
 	}
 
 	@GetMapping("/admin/edit/")
-	public String edit(Model model, @RequestParam("productId") int productId, Product product) {
-		product = dao.findById(productId).get();
-		model.addAttribute("product", product);
-		List<Category> category = dao1.findAll();
-		model.addAttribute("categorys", category);
-		List<Product> product1 = dao.findAll();
-		model.addAttribute("products", product1);
-		List<Producer> producer = producerRepo.findAll();
-		model.addAttribute("producers", producer);
-		return "/admin/admin";
+	public String edit(Model model, @RequestParam("productId") int productId, Product product,
+	                   @RequestParam(value = "page", defaultValue = "0") int page,
+	                   @RequestParam(value = "size", defaultValue = "5") int size) {
+	    product = dao.findById(productId).get();
+	    model.addAttribute("product", product);
+	    List<Category> category = dao1.findAll();
+	    model.addAttribute("categorys", category);
+	    List<Producer> producer = producerRepo.findAll();
+	    model.addAttribute("producers", producer);
+
+	    // Thêm phân trang vào model
+	    Pageable pageable = PageRequest.of(page, size);
+	    Page<Product> productPage = dao.findAll(pageable);
+	    model.addAttribute("products", productPage.getContent());
+	    model.addAttribute("totalPages", productPage.getTotalPages());
+	    model.addAttribute("currentPage", page);
+	    model.addAttribute("size", size);
+
+	    return "/admin/admin";
 	}
+
 
 	@PostMapping("/admin/create")
 	public String createProduct(@Valid @ModelAttribute("product") Product product, BindingResult bindingResult,
-			Model model, @RequestParam("image") MultipartFile imageFile, @RequestParam("category_id") int categoryId,
-			@RequestParam("producer_id") int producerId) {
+            Model model, @RequestParam("image") MultipartFile imageFile,
+            @RequestParam("category_id") int categoryId,
+            @RequestParam("producer_id") int producerId,
+            @RequestParam(value = "page", defaultValue = "0") int page,
+            @RequestParam(value = "size", defaultValue = "5") int size) {
+		
+		// Kiểm tra xem trường category và producer có được chọn hay không
+	    if (categoryId == 0) {
+	        bindingResult.rejectValue("category", "category.required", "Please select item type");
+	    }
+	    if (producerId == 0) {
+	        bindingResult.rejectValue("producer", "producer.required", "Please select producer");
+	    }
 
 		try {
 
@@ -176,13 +196,19 @@ public class ProductController {
 				model.addAttribute("hasMessage", false);
 			} else {
 				model.addAttribute("hasMessage", true);
-				System.out.println(bindingResult.toString());
-				List<Product> product1 = dao.findAll();
-				model.addAttribute("products", product1);
-				List<Category> category = dao1.findAll();
-				model.addAttribute("categorys", category);
-				List<Producer> producer = producerRepo.findAll();
-				model.addAttribute("producers", producer);
+				
+				// Cập nhật danh sách sản phẩm theo trang hiện tại
+				Pageable pageable = PageRequest.of(page, size);
+				Page<Product> productPage = dao.findAll(pageable);
+				
+				model.addAttribute("totalPages", productPage.getTotalPages());
+				model.addAttribute("currentPage", page);
+				model.addAttribute("size", size);
+				
+				model.addAttribute("products", productPage.getContent());
+				model.addAttribute("categorys", dao1.findAll());
+				model.addAttribute("producers", producerRepo.findAll());
+				
 				return "/admin/admin";
 			}
 			// if (product.getCategory()==null) {
@@ -190,13 +216,19 @@ public class ProductController {
 			// }
 
 			if (bindingResult.getErrorCount() > 1) {
-				System.out.println(bindingResult.toString());
-				List<Product> product1 = dao.findAll();
-				model.addAttribute("products", product1);
-				List<Category> category = dao1.findAll();
-				model.addAttribute("categorys", category);
-				List<Producer> producer = producerRepo.findAll();
-				model.addAttribute("producers", producer);
+				
+				// Cập nhật danh sách sản phẩm theo trang hiện tại
+				Pageable pageable = PageRequest.of(page, size);
+				Page<Product> productPage = dao.findAll(pageable);
+				
+				model.addAttribute("totalPages", productPage.getTotalPages());
+				model.addAttribute("currentPage", page);
+				model.addAttribute("size", size);
+				
+				model.addAttribute("products", productPage.getContent());
+				model.addAttribute("categorys", dao1.findAll());
+				model.addAttribute("producers", producerRepo.findAll());
+				
 				return "/admin/admin";
 			}
 			Category category1 = dao1.findById(categoryId).get();
@@ -207,28 +239,41 @@ public class ProductController {
 			product.setActive(true);
 			dao.save(product);
 
+			// Cập nhật danh sách sản phẩm theo trang hiện tại
+			Pageable pageable = PageRequest.of(page, size);
+			Page<Product> productPage = dao.findAll(pageable);
+			
+			model.addAttribute("totalPages", productPage.getTotalPages());
+			model.addAttribute("currentPage", page);
+			model.addAttribute("size", size);
+			
+			model.addAttribute("products", productPage.getContent());
 			model.addAttribute("message", "Create success");
-			model.addAttribute("products", dao.findAll());
-			List<Category> category = dao1.findAll();
-			model.addAttribute("categorys", category);
-			List<Producer> producer = producerRepo.findAll();
-			model.addAttribute("producers", producer);
+			model.addAttribute("categorys", dao1.findAll());
+			model.addAttribute("producers", producerRepo.findAll());
+			
 		} catch (IOException e) {
 			e.printStackTrace();
 			model.addAttribute("error", e);
 		}
 
-		return "redirect:/admin/admin";
+		return "/admin/admin";
 	}
 
 	@PostMapping("/admin/update")
 	public String updateProduct(@Valid @ModelAttribute("product") Product product, BindingResult bindingResult,
-			Model model, @RequestParam("image") MultipartFile imageFile, @RequestParam("category_id") int categoryId,
-			@RequestParam("producer_id") int producerId) {
-		if (bindingResult.hasErrors()) {
-			// Xử lý khi dữ liệu không hợp lệ
-			// return "update-product";
-		}
+            Model model, @RequestParam("image") MultipartFile imageFile,
+            @RequestParam("category_id") int categoryId,
+            @RequestParam("producer_id") int producerId,
+            @RequestParam(value = "page", defaultValue = "0") int page,
+            @RequestParam(value = "size", defaultValue = "5") int size) {
+		// Kiểm tra xem trường category và producer có được chọn hay không
+	    if (categoryId == 0) {
+	        bindingResult.rejectValue("category", "category.required", "Please select item type");
+	    }
+	    if (producerId == 0) {
+	        bindingResult.rejectValue("producer", "producer.required", "Please select producer");
+	    }
 
 		try {
 			Product existingProduct = dao.findById(product.getProductId()).orElse(null);
@@ -260,7 +305,22 @@ public class ProductController {
 					// Cập nhật đường dẫn hình ảnh
 					existingProduct.setImage(filePath);
 				}
-
+				if (bindingResult.getErrorCount() > 1) {
+					
+					// Cập nhật danh sách sản phẩm theo trang hiện tại
+					Pageable pageable = PageRequest.of(page, size);
+					Page<Product> productPage = dao.findAll(pageable);
+					
+					model.addAttribute("totalPages", productPage.getTotalPages());
+					model.addAttribute("currentPage", page);
+					model.addAttribute("size", size);
+					
+					model.addAttribute("products", productPage.getContent());
+					model.addAttribute("categorys", dao1.findAll());
+					model.addAttribute("producers", producerRepo.findAll());
+					
+					return "/admin/admin";
+				}
 				dao.save(existingProduct);
 
 				model.addAttribute("message", "Update success");
@@ -268,13 +328,17 @@ public class ProductController {
 				model.addAttribute("error", "Product not found");
 			}
 
-			// Load lại danh sách sản phẩm và các thông tin khác để hiển thị trên giao diện
-			List<Product> products = dao.findAll();
-			List<Category> categories = dao1.findAll();
-			List<Producer> producers = producerRepo.findAll();
-			model.addAttribute("products", products);
-			model.addAttribute("categorys", categories);
-			model.addAttribute("producers", producers);
+			// Cập nhật danh sách sản phẩm theo trang hiện tại
+			Pageable pageable = PageRequest.of(page, size);
+			Page<Product> productPage = dao.findAll(pageable);
+			model.addAttribute("products", productPage.getContent());
+			model.addAttribute("totalPages", productPage.getTotalPages());
+			model.addAttribute("currentPage", page);
+			model.addAttribute("size", size);
+
+			model.addAttribute("categorys", dao1.findAll());
+			model.addAttribute("producers", producerRepo.findAll());
+
 		} catch (IOException e) {
 			e.printStackTrace();
 			model.addAttribute("error", e);
@@ -285,8 +349,11 @@ public class ProductController {
 
 	@PostMapping("/admin/delete")
 	public String deleteProduct(@Valid @ModelAttribute("product") Product product, BindingResult bindingResult,
-			Model model, @RequestParam("image") MultipartFile imageFile, @RequestParam("category_id") int categoryId,
-			@RequestParam("producer_id") int producerId) {
+            Model model, @RequestParam("image") MultipartFile imageFile,
+            @RequestParam("category_id") int categoryId,
+            @RequestParam("producer_id") int producerId,
+            @RequestParam(value = "page", defaultValue = "0") int page,
+            @RequestParam(value = "size", defaultValue = "5") int size) {
 		if (bindingResult.hasErrors()) {
 			// Xử lý khi dữ liệu không hợp lệ
 			// return "update-product";
@@ -324,19 +391,24 @@ public class ProductController {
 				}
 
 				dao.save(existingProduct);
-
-				model.addAttribute("message", "delete success");
+				model.addAttribute("message", "Delete success");
+				
 			} else {
 				model.addAttribute("error", "Product not found");
 			}
 
-			// Load lại danh sách sản phẩm và các thông tin khác để hiển thị trên giao diện
-			List<Product> products = dao.findAll();
-			List<Category> categories = dao1.findAll();
-			List<Producer> producers = producerRepo.findAll();
-			model.addAttribute("products", products);
-			model.addAttribute("categorys", categories);
-			model.addAttribute("producers", producers);
+			
+
+			// Cập nhật danh sách sản phẩm theo trang hiện tại
+			Pageable pageable = PageRequest.of(page, size);
+			Page<Product> productPage = dao.findAll(pageable);
+			model.addAttribute("products", productPage.getContent());
+			model.addAttribute("totalPages", productPage.getTotalPages());
+			model.addAttribute("currentPage", page);
+			model.addAttribute("size", size);
+
+			model.addAttribute("categorys", dao1.findAll());
+			model.addAttribute("producers", producerRepo.findAll());
 		} catch (IOException e) {
 			e.printStackTrace();
 			model.addAttribute("error", e);

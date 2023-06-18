@@ -7,7 +7,37 @@
 <meta charset="utf-8">
 <meta name="viewport"
 	content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<style>
+.pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
 
+.pagination-buttons {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.pagination-buttons li {
+    display: inline-block;
+    margin-right: 5px;
+}
+
+.pagination-buttons li a {
+    display: inline-block;
+    padding: 5px 10px;
+    border: 1px solid #ccc;
+    text-decoration: none;
+    color: #000;
+}
+
+.pagination-buttons li.active a {
+    background-color: #ccc;
+}
+
+</style>
 <!-- Bootstrap CSS -->
 <link rel="stylesheet"
 	href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
@@ -18,6 +48,14 @@
 
 <body>
 	<div th:include="/admin/layout/nav.html"></div>
+	<div class="col-4 ml-auto">
+    <form th:action="@{/order}" method="get">
+        <div class="input-group">
+            <input type="text" class="form-control" placeholder="Search by name" name="username" th:value="${username}">
+            <input type="submit" value="Search">
+        </div>
+    </form>
+</div>
 	<main class="container-fluid">
 		<div class="col mt-4">
 			<ul class="nav nav-tabs" id="myTab" role="tablist">
@@ -47,13 +85,22 @@
 						<tr th:each="item : ${Orders}">
 							<td th:text="${item.orderId}"></td>
 							<td th:text="${item.user.username}"></td>
-							<td th:text="${item.orderDate}"></td>
+							<td th:text="${#dates.format(item.orderDate, 'dd/MM/yyyy HH:mm:ss')}"></td>
 							<td th:text="${item.totalAmount}"></td>
 							</td>
 
 							<!-- Các cột khác -->
 						</tr>
 					</table>
+								<div class="pagination">
+								    <ul class="pagination-buttons">
+								        <li th:each="pageNum : ${#numbers.sequence(0, totalPages - 1)}"
+								            th:class="${pageNum == currentPage ? 'active' : ''}">
+								            <a th:href="@{/order(page=${pageNum}, size=${size}, keywords=${keywords})}"
+								                th:text="${pageNum + 1}"></a>
+								        </li>
+								    </ul>
+								</div>
 				</div>
 
 
@@ -79,6 +126,15 @@
 							<!-- Các cột khác -->
 						</tr>
 					</table>
+					<div class="pagination">
+								    <ul class="pagination-buttons">
+								        <li th:each="pageNum : ${#numbers.sequence(0, totalPages - 1)}"
+								            th:class="${pageNum == currentPage ? 'active' : ''}">
+								            <a th:href="@{/order(page=${pageNum}, size=${size}, keywords=${keywords})}"
+								                th:text="${pageNum + 1}"></a>
+								        </li>
+								    </ul>
+								</div>
 				</div>
 			</div>
 		</div>

@@ -77,6 +77,12 @@ public class HomeController {
 			@RequestParam("username") String username, @RequestParam("password") String password,
 			HttpServletRequest request, HttpServletResponse response) {
 
+		String Message = session.get("Message");
+	    if (Message != null) {
+	        model.addAttribute("messages", Message);
+	        session.remove("messages");
+	    }
+	    
 		user = dao.findByUsername(username);
 
 		if (user != null && user.getPassword().equals(password)) {

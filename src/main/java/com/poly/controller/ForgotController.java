@@ -15,6 +15,7 @@ import com.poly.entity.User;
 import com.poly.repository.UserRepository;
 import com.poly.service.MailInfo;
 import com.poly.service.MailerService;
+import com.poly.service.SessionService;
 
 import jakarta.mail.MessagingException;
 
@@ -26,6 +27,10 @@ public class ForgotController {
 	
 	@Autowired
 	MailerService impl;
+	
+	@Autowired
+	SessionService sessionService;
+	
 	public String generateRandomString() {
         int length = 10; // Độ dài của chuỗi ký tự ngẫu nhiên
         String characters = "ABCDEF123456";
@@ -60,10 +65,9 @@ public class ForgotController {
 		
 		if(check == true) {
 			String newPassword = generateRandomString();
-			User customer = dao.findByEmail(user.getEmail());
-			customer.setPassword(newPassword);
-			dao.save(customer);
 			
+			sessionService.set("Email", user.getEmail());
+			sessionService.set("MXN", newPassword);
 			String subject = "Đổi mật khẩu";
 			String message = newPassword;
 			
@@ -74,7 +78,8 @@ public class ForgotController {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			return "login";
+			model.addAttribute("message", "Email đã được gửi đến bạn!");
+			return "xacNhanMK";
 		}else {
 		return "quenMK";
 	}}

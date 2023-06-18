@@ -4,6 +4,8 @@ import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
@@ -24,4 +26,10 @@ public interface OrderRepository extends JpaRepository<Order, Integer> {
 	BigDecimal getRevenueByDateRange(Date startDate, Date endDate);
 
 	List<Order> findByUser(User user);
+	Page<Order> findByUser(User user, Pageable pageable);
+	Page<Order> findByUserUsernameContaining(String username, Pageable pageable);
+	
+	
+
+	
 }

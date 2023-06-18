@@ -58,10 +58,12 @@ public class Product implements Serializable {
     @Column(name = "active")
     private boolean active;
     
+
     @ManyToOne
     @JoinColumn(name = "category_id")
     private Category category;
     
+
     @ManyToOne
     @JoinColumn(name = "producer_id")
     private Producer producer;
@@ -75,7 +77,11 @@ public class Product implements Serializable {
     @OneToOne(mappedBy = "product")
     private Inventory inventory;
     
-  
+    @Override
+    public String toString() {
+        return "Product[id=" + productId + ", name=" + productName + "]";
+    }
+
 
     // Constructors, getters, setters, and other properties
 }

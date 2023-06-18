@@ -7,11 +7,15 @@ import java.util.List;
 import java.util.ArrayList;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.poly.entity.Cart;
 import com.poly.entity.CartProduct;
@@ -93,7 +97,7 @@ public class CheckoutController {
 		Cart cart = cartRepository.findById(cartId).orElse(null);
 
 		// Kiểm tra giỏ hàng và người dùng
-		if (cart != null && cart.getUser() != null) {
+		if (cart != null && cart.getUser() != null && !cart.getCartProducts().isEmpty()) {
 			// Kiểm tra số lượng sản phẩm trong kho trước khi đặt hàng
 			List<InsufficientProduct> insufficientProducts = new ArrayList<>(); // Danh sách tên sản phẩm không đủ số
 																				// lượng
@@ -180,80 +184,143 @@ public class CheckoutController {
 
 				// Chuyển hướng người dùng đến trang lỗi hoặc trang thông báo lỗi
 
-				return "insufficient_quantity";
+				return "/Eror1";
 			}
 		} else {
 			// Xử lý khi có lỗi xảy ra (ví dụ: không tìm thấy giỏ hàng hoặc người dùng)
 			// ...
 
 			// Chuyển hướng người dùng đến trang lỗi hoặc trang thông báo lỗi
-			return "redirect:/shop";
+			return "redirect:/Eror2";
 		}
 	}
 
 	@GetMapping("/order")
-	public String LoadOrder(Model model) {
-		model.addAttribute("OrderItems", orderItemRepository.findAll());
-		model.addAttribute("Orders", orderRepository.findAll());// Truyền danh sách dữ liệu vào model
-		return "/admin/order"; // Trả
+	public String LoadOrder(Model model, @RequestParam(value = "username", required = false) String username,
+	        @RequestParam(value = "page", defaultValue = "0") int page,
+	        @RequestParam(value = "size", defaultValue = "10") int size) {
+
+	    // Kiểm tra nếu có giá trị tên người dùng được truyền vào
+	    if (username != null && !username.isEmpty()) {
+	        // Thực hiện tìm kiếm đơn hàng theo tên người dùng
+	        Pageable pageable = PageRequest.of(page, size);
+	        Page<Order> orderPage = orderRepository.findByUserUsernameContaining(username, pageable);
+	        model.addAttribute("Orders", orderPage.getContent());
+	        model.addAttribute("totalPages", orderPage.getTotalPages());
+	        model.addAttribute("currentPage", page);
+	        model.addAttribute("size", size);
+	        model.addAttribute("username", username);
+	    } else {
+	        // Lấy tất cả đơn hàng
+	        Pageable pageable = PageRequest.of(page, size);
+	        Page<Order> orderPage = orderRepository.findAll(pageable);
+	        model.addAttribute("Orders", orderPage.getContent());
+	        model.addAttribute("totalPages", orderPage.getTotalPages());
+	        model.addAttribute("currentPage", page);
+	        model.addAttribute("size", size);
+	    }
+
+	    // Truyền danh sách dữ liệu vào model
+	    model.addAttribute("OrderItems", orderItemRepository.findAll());
+
+	    return "/admin/order";
 	}
+
 
 	@GetMapping("/cartsuccess")
 	public String cartsuccess(Model model) {
 		return "cartsuccess"; // Trả
 	}
 
-	@GetMapping("/insufficient_quantity")
+	@GetMapping("/Eror1")
 	public String insufficient_quantity(Model model) {
-		return "insufficient_quantity"; // Trả
+		return "Eror1"; // Trả
 	}
-
+	
+	@GetMapping("/Eror2")
+	public String Eror2(Model model) {
+		return "Eror2"; // Trả
+	}
 	@GetMapping("/OrderItem")
-	public String loadOrders(Model model) {
-		// Lấy tên người dùng
-		String Userid = (String) request.getSession().getAttribute("user");
+	public String loadOrders(Model model, @RequestParam(defaultValue = "0") int page) {
+	    // Lấy tên người dùng
+	    String userId = (String) request.getSession().getAttribute("user");
 
-		// Tìm người dùng trong cơ sở dữ liệu dựa vào tên người dùng
-		User user = userDao.findByUsername(Userid);
+	    // Tìm người dùng trong cơ sở dữ liệu dựa vào tên người dùng
+	    User user = userDao.findByUsername(userId);
 
-		if (user != null) {
-			// Lấy danh sách đơn hàng của người dùng
-			List<Order> orders = orderRepository.findByUser(user);
+	    if (user != null) {
+	        // Định nghĩa số đơn hàng trên mỗi trang
+	        int pageSize = 5;
 
-			// Thêm danh sách đơn hàng vào model để hiển thị trên giao diện
-			model.addAttribute("orders", orders);
-		}
+	        // Tạo đối tượng Pageable để chỉ định số trang và kích thước trang
+	        Pageable pageable = PageRequest.of(page, pageSize);
 
-		return "OrderItem";
+	        // Lấy danh sách đơn hàng của người dùng trên trang hiện tại
+	        Page<Order> orderPage = orderRepository.findByUser(user, pageable);
+	        List<Order> orders = orderPage.getContent();
+
+	        // Thêm danh sách đơn hàng và thông tin phân trang vào model để hiển thị trên giao diện
+	        model.addAttribute("orders", orders);
+	        model.addAttribute("currentPage", page);
+	        model.addAttribute("totalPages", orderPage.getTotalPages());
+	    }
+
+	    return "OrderItem";
 	}
+
 
 	@GetMapping("/OrderItem/{orderId}")
-	public String loadOrderDetails(Model model, @PathVariable("orderId") Integer orderId) {
-		// Tìm đơn hàng dựa vào orderId
-		Order order = orderRepository.findById(orderId).orElse(null);
+	public String loadOrderDetails(Model model, @PathVariable("orderId") Integer orderId, @RequestParam(defaultValue = "0") int page) {
+	    // Tìm đơn hàng dựa vào orderId
+	    Order order = orderRepository.findById(orderId).orElse(null);
 
-		if (order != null) {
-			// Lấy danh sách chi tiết đơn hàng của đơn hàng
-			List<OrderItem> orderDetails = orderItemRepository.findByOrder(order);
+	    if (order != null) {
+	        // Định nghĩa số chi tiết đơn hàng trên mỗi trang
+	        int pageSize = 5;
 
-			// Thêm đơn hàng và danh sách chi tiết vào model để hiển thị trên giao diện
-			model.addAttribute("order", order);
-			model.addAttribute("orderDetails", orderDetails);
+	        // Tạo đối tượng Pageable để chỉ định số trang và kích thước trang
+	        Pageable pageable = PageRequest.of(page, pageSize);
 
-		}
-		String Userid = (String) request.getSession().getAttribute("user");
+	        // Lấy danh sách chi tiết đơn hàng của đơn hàng trên trang hiện tại
+	        Page<OrderItem> orderItemPage = orderItemRepository.findByOrder(order, pageable);
+	        List<OrderItem> orderDetails = orderItemPage.getContent();
 
-		// Tìm người dùng trong cơ sở dữ liệu dựa vào tên người dùng
-		User user = userDao.findByUsername(Userid);
+	        // Thêm đơn hàng và danh sách chi tiết vào model để hiển thị trên giao diện
+	        model.addAttribute("order", order);
+	        model.addAttribute("orderDetails", orderDetails);
+	        model.addAttribute("currentPage", page);
+	        model.addAttribute("totalPages", orderItemPage.getTotalPages());
+	    }
 
-		if (user != null) {
-			// Lấy danh sách đơn hàng của người dùng
-			List<Order> orders = orderRepository.findByUser(user);
+	    String userId = (String) request.getSession().getAttribute("user");
 
-			// Thêm danh sách đơn hàng vào model để hiển thị trên giao diện
-			model.addAttribute("orders", orders);
-		}
-		return "OrderItem";
+	    // Tìm người dùng trong cơ sở dữ liệu dựa vào tên người dùng
+	    User user = userDao.findByUsername(userId);
+
+	    if (user != null) {
+	        // Lấy danh sách đơn hàng của người dùng
+	        List<Order> orders = orderRepository.findByUser(user);
+
+	        // Định nghĩa số chi tiết đơn hàng trên mỗi trang
+	        int pageSize = 5;
+
+	        // Tạo đối tượng Pageable để chỉ định số trang và kích thước trang
+	        Pageable pageable = PageRequest.of(page, pageSize);
+
+	        // Lấy danh sách chi tiết đơn hàng của đơn hàng trên trang hiện tại
+	        Page<OrderItem> orderItemPage = orderItemRepository.findByOrder(order, pageable);
+	        List<OrderItem> orderDetails = orderItemPage.getContent();
+
+	        // Thêm đơn hàng và danh sách chi tiết vào model để hiển thị trên giao diện
+	        model.addAttribute("order", order);
+	        model.addAttribute("orderDetails", orderDetails);
+	        model.addAttribute("currentPage", page);
+	        model.addAttribute("totalPages", orderItemPage.getTotalPages());
+	    }
+
+	    return "OrderItem";
 	}
+
 
 }
