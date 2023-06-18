@@ -53,47 +53,44 @@ public class ProductController {
 	@Autowired
 	SessionService session;
 
-
 	@GetMapping("/shop")
-	public String paginateAndSearch(Model model, 
-	        @RequestParam("p") Optional<Integer> p, 
-	        @RequestParam("keywords") Optional<String> keywords,
-	        @RequestParam("value") Optional<Integer> value) {
-	    // Phân trang
-	    Pageable pageable = PageRequest.of(p.orElse(0), 6);
-	    Page<Product> page;
-	    
-	    // Tìm kiếm
-	    if (keywords.isPresent() && !keywords.get().isEmpty()) {
-	        String kw = "%" + keywords.get() + "%";
-	        if (value.isPresent()) {
-	            page = dao.findAllByCategoryAndNameLike(value.get(), kw, pageable);
-	        } else {
-	            page = dao.findAllByNameLike(kw, pageable);
-	        }
-	    } else {
-	        if (value.isPresent()) {
-	            page = dao.findByCategory(value.get(), pageable);
-	        } else {
-	            page = dao.findAll(pageable);
-	        }
-	    }
-	    
-	    // Kiểm tra kết quả tìm kiếm
-	    if (page.isEmpty()) {
-	        List<Product> allProducts;
-	        if (value.isPresent()) {
-	            allProducts = dao.findByCategory(value.get());
-	        } else {
-	            allProducts = dao.findAll();
-	        }
-	        model.addAttribute("message", "Không có sản phẩm phù hợp.");
-	        model.addAttribute("products", allProducts);
-	    } else {
-	        model.addAttribute("products", page);
-	    }
-	    
-	    return "shop";
+	public String paginateAndSearch(Model model, @RequestParam("p") Optional<Integer> p,
+			@RequestParam("keywords") Optional<String> keywords, @RequestParam("value") Optional<Integer> value) {
+		// Phân trang
+		Pageable pageable = PageRequest.of(p.orElse(0), 6);
+		Page<Product> page;
+
+		// Tìm kiếm
+		if (keywords.isPresent() && !keywords.get().isEmpty()) {
+			String kw = "%" + keywords.get() + "%";
+			if (value.isPresent()) {
+				page = dao.findAllByCategoryAndNameLike(value.get(), kw, pageable);
+			} else {
+				page = dao.findAllByNameLike(kw, pageable);
+			}
+		} else {
+			if (value.isPresent()) {
+				page = dao.findByCategory(value.get(), pageable);
+			} else {
+				page = dao.findAll(pageable);
+			}
+		}
+
+		// Kiểm tra kết quả tìm kiếm
+		if (page.isEmpty()) {
+			List<Product> allProducts;
+			if (value.isPresent()) {
+				allProducts = dao.findByCategory(value.get());
+			} else {
+				allProducts = dao.findAll();
+			}
+			model.addAttribute("message", "Không có sản phẩm phù hợp.");
+			model.addAttribute("products", allProducts);
+		} else {
+			model.addAttribute("products", page);
+		}
+
+		return "shop";
 	}
 
 	@GetMapping("/shop/{productId}")
@@ -106,20 +103,37 @@ public class ProductController {
 	}
 
 	@GetMapping("/admin")
-	public String admin(Model model, @ModelAttribute("product") Product product) {
-		List<Product> product1 = dao.findAll();
-		model.addAttribute("products", product1);
-		List<Category> category = dao1.findAll();
-		model.addAttribute("categorys", category);
-		List<Producer> producer = producerRepo.findAll();
-		model.addAttribute("producers", producer);
+	public String admin(Model model, @ModelAttribute("product") Product product, @RequestParam("p") Optional<Integer> p,
+			@RequestParam("keywords") Optional<String> keywords, @RequestParam("value") Optional<Integer> value) {
+		Page<Product> page;
+		Pageable pageable = PageRequest.of(p.orElse(0), 6);
+		// Tìm kiếm
+		if (keywords.isPresent() && !keywords.get().isEmpty()) {
+			String kw = "%" + keywords.get() + "%";
+			page = dao.findAllByNameLike(kw,pageable);
+			model.addAttribute("products", page);
+			
+			List<Category> category = dao1.findAll();
+			model.addAttribute("categorys", category);
+			List<Producer> producer = producerRepo.findAll();
+			model.addAttribute("producers", producer);
+		}else {
+			page = dao.findAll(pageable);
+			model.addAttribute("products", page);
+			List<Category> category = dao1.findAll();
+			model.addAttribute("categorys", category);
+			List<Producer> producer = producerRepo.findAll();
+			model.addAttribute("producers", producer);
+		}
 		return "/admin/admin";
 	}
 
 	@GetMapping("/admin/edit/")
 	public String edit(Model model, @RequestParam("productId") int productId, Product product) {
+		
 		product = dao.findById(productId).get();
 		model.addAttribute("product", product);
+		
 		List<Category> category = dao1.findAll();
 		model.addAttribute("categorys", category);
 		List<Product> product1 = dao.findAll();

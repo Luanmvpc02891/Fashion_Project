@@ -94,15 +94,18 @@
 					<div class="col-12 pb-1">
 						<nav aria-label="Page navigation">
 							<div class="pagination justify-content-center mb-3">
-								<a class="btn btn-primary mx-2" th:href="@{/shop?p=0}">First</a>
-								<a class="btn btn-primary mx-2"
+								<a class="btn btn-primary mx-2" th:href="@{/shop?p=0}"
+									th:unless="${currentPage == 'productEditing'}">First</a> <a
+									class="btn btn-primary mx-2"
 									th:href="@{/shop(p=${products.number-1})}"
-									th:if="${products.number > 0}">Previous</a> <a
-									class="btn btn-primary mx-2"
+									th:if="${products.number > 0 && currentPage != 'productEditing'}">Previous</a>
+								<a class="btn btn-primary mx-2"
 									th:href="@{/shop(p=${products.number+1})}"
-									th:if="${products.number < products.totalPages-1}">Next</a> <a
-									class="btn btn-primary mx-2"
-									th:href="@{/shop(p=${products.totalPages-1})}">Last</a>
+									th:if="${products.number < products.totalPages-1 && currentPage != 'productEditing'}">Next</a>
+								<a class="btn btn-primary mx-2"
+									th:href="@{/shop(p=${products.totalPages-1})}"
+									th:unless="${currentPage == 'productEditing'}">Last</a>
+
 							</div>
 						</nav>
 					</div>

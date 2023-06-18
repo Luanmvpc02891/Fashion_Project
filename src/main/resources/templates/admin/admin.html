@@ -19,16 +19,7 @@
 
 <body>
 	<div th:include="/admin/layout/nav.html"></div>
-	<div class="col-4 ml-auto" >
-			<form action="/shop">
-				<div class="input-group">
-					<input type="text" class="form-control"
-						placeholder="Search by name" name="keywords"
-						th:value="${keywords}">
-					<input type="submit" value="Search">
-				</div>
-			</form>
-		</div>
+
 	<main class="container-fluid">
 		<div class="col mt-4">
 			<div th:if="${not #strings.isEmpty(message)}" class="row">
@@ -56,6 +47,16 @@
 						aria-controls="userList" aria-selected="false">Product
 						List</button>
 				</li>
+				<div class="col-4 ml-auto">
+					<form action="/admin">
+						<div class="input-group">
+							<input type="text" class="form-control"
+								placeholder="Search by name" name="keywords"
+								th:value="${keywords}"> <input type="submit"
+								value="Search">
+						</div>
+					</form>
+				</div>
 			</ul>
 			<div class="tab-content" id="myTabContent">
 				<div class="tab-pane fade show active" id="userEditing"
@@ -158,8 +159,6 @@
 						</div>
 					</form>
 				</div>
-
-
 				<div class="tab-pane fade" id="userList" role="tabpanel"
 					aria-labelledby="userList-tab">
 					<table class="table table-stripe">
@@ -168,7 +167,7 @@
 							<td>Tên sản phẩm</td>
 							<td>Giá</td>
 							<td>Số lượng</td>
-							<td>Giảm giá</td>		
+							<td>Giảm giá</td>
 							<td>Hình Ảnh</td>
 							<td>Loại</td>
 							<td>ID Nhà sản xuất</td>
@@ -192,7 +191,21 @@
 							<!-- Các cột khác -->
 						</tr>
 					</table>
-
+					<div class="col-12 pb-1">
+						<nav aria-label="Page navigation">
+							<div class="pagination justify-content-center mb-3">
+								<a class="btn btn-primary mx-2" th:href="@{/admin?p=0}">First</a>
+								<a class="btn btn-primary mx-2"
+									th:href="@{/admin(p=${products.number-1})}"
+									th:if="${products.number > 0}">Previous</a> <a
+									class="btn btn-primary mx-2"
+									th:href="@{/admin(p=${products.number+1})}"
+									th:if="${products.number < products.totalPages-1}">Next</a> <a
+									class="btn btn-primary mx-2"
+									th:href="@{/admin(p=${products.totalPages-1})}">Last</a>
+							</div>
+						</nav>
+					</div>
 				</div>
 			</div>
 		</div>
