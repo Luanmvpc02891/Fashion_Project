@@ -77,11 +77,6 @@ public class HomeController {
 			@RequestParam("username") String username, @RequestParam("password") String password,
 			HttpServletRequest request, HttpServletResponse response) {
 
-		String Message = session.get("Message");
-	    if (Message != null) {
-	        model.addAttribute("messages", Message);
-	        session.remove("messages");
-	    }
 	    
 		user = dao.findByUsername(username);
 
@@ -112,6 +107,7 @@ public class HomeController {
 					// Lưu cartId vào session
 					request.getSession().setAttribute("cartId", cart.getCartId());
 					request.getSession().setAttribute("user", user.getUsername());
+					request.getSession().setAttribute("userId", user.getUserId());
 
 					return "redirect:/index";
 				}

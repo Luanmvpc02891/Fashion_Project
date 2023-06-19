@@ -97,14 +97,16 @@ label {
 		<h1 class="m-0 display-5 font-weight-semi-bold">
 			<img src="/img/logo.png" alt="">
 		</h1>
-		
-		<h1 th:if="${successMessage}" th:text="${successMessage}" ></h1>
+
+		<h1 th:if="${successMessage}" th:text="${successMessage}"></h1>
+		<h1 th:if="${messages}" th:text="${messages}"></h1>
 		<form th:action="@{/login}" th:object="${user}" method="post">
 
 
 			<div class="form-group">
-				<label for="username">Tài khoản:</label> <input type="text" th:field="*{username}"
-					class="form-control" name="username" placeholder="Nhập tài khoản">
+				<label for="username">Tài khoản:</label> <input type="text"
+					th:field="*{username}" class="form-control" name="username"
+					placeholder="Nhập tài khoản">
 			</div>
 			<div class="alert alert-danger"
 				th:if="${#fields.hasErrors('username')}" th:errors="*{username}"></div>
@@ -117,7 +119,14 @@ label {
 
 			<input type="submit" class="btn btn-primary btn-block" value="Login">
 		</form>
-
+		<div class="additional-options">
+			<p>
+				Quên mật khẩu? <a th:href="@{/account/quenMK}">Nhấn vào đây</a>
+			</p>
+			<p>
+				Chưa có tài khoản? <a th:href="@{/register}">Đăng ký</a>
+			</p>
+		</div>
 		<div class="social-icons">
 			<a href="#" target="_blank"><i class="fab fa-facebook-f"></i></a> <a
 				href="#" target="_blank"><i class="fab fa-google"></i></a> <a

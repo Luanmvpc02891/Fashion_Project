@@ -47,8 +47,9 @@ h1 {
 						<span class="bg-secondary px-2">Update Password</span>
 					</h2>
 				</div>
-				<h1 style="color: #d19c97;"  th:text="${Message}"></h1>
-				<h1 style="color: #d19c97;" th:if="${successMessage}" th:text="${successMessage}"></h1>
+				<h1 style="color: #d19c97;" th:text="${Message}"></h1>
+				<h1 style="color: #d19c97;" th:if="${successMessage}"
+					th:text="${successMessage}"></h1>
 				<h1 style="color: #d19c97;" th:if="${message}" th:text="${message}"></h1>
 
 				<form th:action="@{/account/xacNhanMK}" method="post"

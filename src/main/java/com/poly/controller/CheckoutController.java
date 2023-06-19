@@ -245,7 +245,7 @@ public class CheckoutController {
 	public String loadOrders(Model model, @RequestParam(defaultValue = "0") int page) {
 	    // Lấy tên người dùng
 	    String userId = (String) request.getSession().getAttribute("user");
-
+	  
 	    // Tìm người dùng trong cơ sở dữ liệu dựa vào tên người dùng
 	    User user = userDao.findByUsername(userId);
 
