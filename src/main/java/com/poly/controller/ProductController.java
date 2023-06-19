@@ -53,7 +53,6 @@ public class ProductController {
 	@Autowired
 	SessionService session;
 
-
 	@GetMapping("/shop")
 	public String paginateAndSearch(Model model, 
 	        @RequestParam("p") Optional<Integer> p, 
